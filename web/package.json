@@ -1,5 +1,5 @@
 {
-  "name": "bzcms",
+  "name": "MS",
   "version": "2.0.0",
   "description": "Simple CMS with HapiJs",
   "main": "app.js",
