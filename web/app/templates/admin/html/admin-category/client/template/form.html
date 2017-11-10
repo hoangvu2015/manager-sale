@@ -1,0 +1,87 @@
+<input name="image" type="file" id="upload" class="hidden" onchange="">
+<section ng-init="vmCategory.findOne()">
+  <section class="content-header">
+    <h1>Category</h1>
+  </section>
+  <ng-loading loading-done="vmCategory.isLoading" />
+  <!-- Main content -->
+  <section class="content">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="box box-info">
+          <div class="box-body">
+            <div ng-if="!vmCategory.queryParams.id" class="form-group">
+              <a class="btn btn-primary" ng-click="vmCategory.create(FormName.$valid, 'save&list')">Save &amp; List</a> &nbsp;&nbsp;
+              <a class="btn btn-primary" ng-click="vmCategory.create(FormName.$valid, 'apply')">Apply</a>&nbsp;&nbsp;
+              <input type="button" value="Cancel" class="btn btn-default" ng-click="vmCategory.gotoList()">&nbsp;&nbsp;
+            </div>
+            <div ng-if="vmCategory.queryParams.id" class="form-group">
+              <a class="btn btn-primary" ng-click="vmCategory.update(FormName.$valid, 'save&list')">Save &amp; List</a> &nbsp;&nbsp;
+              <a class="btn btn-primary" ng-click="vmCategory.update(FormName.$valid, 'apply')">Apply</a>&nbsp;&nbsp;
+              <input type="button" value="Cancel" class="btn btn-default" ng-click="vmCategory.gotoList()">&nbsp;&nbsp;
+            </div>
+          </div>
+        </div>
+      </div>
+      <form novalidate name="FormName">
+        <div class="col-md-8">
+          <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">{{vmCategory.queryParams.id ? 'Edit' : 'New'}} Category</h3>
+            </div>
+            <div class="box-body">
+
+              <!-- name -->
+              <div class="form-group">
+                <label class="control-label" for="name">name</label>
+                <div class="controls">
+                  <input type="text" ng-model="vmCategory.formData.name" ng-change="vmCategory.checkSlug(vmCategory.formData.name)" id="name" name="name" class="form-control" placeholder="name" required>
+                </div>
+                <div class="error-messages message" ng-messages="FormName.name.$error" ng-messages-multiple ng-if="vmCategory.submitted">
+                  <error-message/>
+                </div>
+              </div>
+
+              <!-- Slug -->
+              <div class="form-group">
+                <label class="control-label" for="slug">Slug</label>
+                <div class="controls">
+                  <input type="text" ng-model="vmCategory.formData.slug" id="slug" name="slug" class="form-control" placeholder="Slug">
+                </div>
+              </div>
+
+              <!-- Description -->
+              <div class="form-group">
+                <label class="control-label" for="description">Description</label>
+                <div class="controls">
+                  <textarea class="form-control" name="description" ng-model="vmCategory.formData.description" rows="5"></textarea>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="box box-default">
+            <div class="box-body">
+              <div class="form-group">
+                <label class="control-label" for="type">Type</label>
+                <div class="controls">
+                  <select class="form-control" ng-model="vmCategory.formData.type" id="type" ng-options="item.value as item.name for item in vmCategory.types" required>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label" for="status">Status</label>
+                <div class="controls">
+                  <select class="form-control" ng-model="vmCategory.formData.status" id="status" ng-options="item.value as item.name for item in vmCategory.statuses" required>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+</section>

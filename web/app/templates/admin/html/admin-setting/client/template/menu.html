@@ -1,0 +1,25 @@
+<li class="treeview">
+  <a href="#">
+    <i class="fa fa-table"></i>
+    <span>Settings</span>
+    <span class="pull-right-container">
+      <i class="fa fa-angle-left pull-right"></i>
+    </span>
+  </a>
+  <ul class="treeview-menu">
+    <!-- =========================Settings========================= -->
+    <li ng-if="pageMethods.authSvc.isAdmin" ng-class="{'active':pageData.menuType === 'list-setting'}" class="treeview">
+      <a data-ui-sref="listSetting()">
+        <i class="fa fa-circle-o text-aqua"></i> <span> List settings</span>
+      </a>
+    </li>
+
+    <!-- =========================Settings========================= -->
+    <li ng-if="pageMethods.authSvc.isAdmin" ng-class="{'active':pageData.menuType === 'create-setting'}" class="treeview">
+      <a ui-sref="createSetting()">
+        <i class="fa fa-circle-o text-aqua"></i> <span> Create settings</span>
+      </a>
+    </li>
+    <!-- =========================END Settings========================= -->
+  </ul>
+</li>

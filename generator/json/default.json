@@ -1,0 +1,126 @@
+{
+  "title": {
+    "form":{
+      "label": "Tiêu đề",
+      "type": "text",
+      "slug": true,
+      "list": true
+    },
+    "schema": {
+      "type": "String",
+      "default": "",
+      "required": "Please fill title",
+      "trim": true
+    }
+  },
+  "slug": {
+    "form":{
+      "label": "Slug",
+      "type": "text",
+      "list": true
+    },
+    "schema": {
+      "type": "String",
+      "default": "",
+      "trim": true
+    }
+  },
+  "num": {
+    "form":{
+      "label": "Số",
+      "type": "number",
+      "list": true
+    },
+    "schema": {
+      "type": "Number",
+      "default": 1
+    }
+  },
+  "description": {
+    "form":{
+      "label": "Mô tả",
+      "type": "ckeditor"
+    },
+    "schema": {
+      "type": "String",
+      "default": "",
+      "trim": true
+    }
+  },
+  "thumb": {
+    "form":{
+      "label": "Hình Thumb",
+      "type": "image",
+      "list": true
+    },
+    "schema": {
+      "type": "String",
+      "default": "",
+      "trim": true
+    }
+  },
+  "gallery": {
+    "form":{
+      "label": "Thư viện ảnh",
+      "type": "images",
+      "list": true
+    },
+    "schema": [{
+      "type": "String",
+      "default": "",
+      "trim": true
+    }]
+  },
+  "date": {
+    "form":{
+      "label": "Ngày",
+      "type": "date",
+      "timePicker": true,
+      "list": true
+    },
+    "schema": {
+      "type": "Date"
+    }
+  },
+  "date_range": {
+    "form":{
+      "label": "Khoảng thời gian",
+      "type": "date_range"
+    },
+    "schema": {
+      "startDate": {
+        "type": "Date"
+      },
+      "endDate": {
+        "type": "Date"
+      }
+    }
+  },
+  "category": {
+    "form":{
+      "label": "Danh mục",
+      "type": "multi_select",
+      "list": true,
+      "service": {
+        "name": "Categories",
+        "module": "category",
+        "key": "_id",
+        "value": "name"
+      }
+    },
+    "schema": [{
+      "type": "Schema.ObjectId",
+      "ref": "Category"
+    }]
+  },
+  "option": {
+    "form":{
+      "label": "Loại",
+      "type": "select",
+      "list": true
+    },
+    "schema": {
+      "type": "String"
+    }
+  }
+}

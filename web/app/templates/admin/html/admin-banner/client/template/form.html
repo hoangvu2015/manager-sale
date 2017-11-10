@@ -1,0 +1,132 @@
+<input name="image" type="file" id="upload" class="hidden" onchange="">
+<section ng-init="vmBanner.findOne()">
+  <section class="content-header">
+    <h1>Banner</h1>
+  </section>
+  <ng-loading loading-done="vmBanner.isLoading" />
+  <!-- Main content -->
+  <section class="content">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="box box-info">
+          <div class="box-body">
+            <div ng-if="!vmBanner.queryParams.id" class="form-group">
+              <a class="btn btn-primary" ng-click="vmBanner.create(FormName.$valid, 'save&list')">Save &amp; List</a> &nbsp;&nbsp;
+              <a class="btn btn-primary" ng-click="vmBanner.create(FormName.$valid, 'apply')">Apply</a>&nbsp;&nbsp;
+              <input type="button" value="Cancel" class="btn btn-default" ng-click="vmBanner.gotoList()">&nbsp;&nbsp;
+            </div>
+            <div ng-if="vmBanner.queryParams.id" class="form-group">
+              <a class="btn btn-primary" ng-click="vmBanner.update(FormName.$valid, 'save&list')">Save &amp; List</a> &nbsp;&nbsp;
+              <a class="btn btn-primary" ng-click="vmBanner.update(FormName.$valid, 'apply')">Apply</a>&nbsp;&nbsp;
+              <input type="button" value="Cancel" class="btn btn-default" ng-click="vmBanner.gotoList()">&nbsp;&nbsp;
+            </div>
+          </div>
+        </div>
+      </div>
+      <form novalidate name="FormName">
+        <div class="col-md-8">
+          <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">{{vmBanner.queryParams.id ? 'Edit' : 'New'}} Banner</h3>
+            </div>
+            <div class="box-body">
+
+              <!-- Title -->
+              <div class="form-group">
+                <label class="control-label" for="title">Title</label>
+                <div class="controls">
+                  <input type="text" ng-model="vmBanner.formData.title" id="title" name="title" class="form-control" placeholder="Title" required>
+                </div>
+                <div class="error-messages message" ng-messages="FormName.title.$error" ng-messages-multiple ng-if="vmBanner.submitted">
+                  <error-message/>
+                </div>
+              </div>
+
+              <!-- subtitle -->
+              <div class="form-group">
+                <label class="control-label" for="subtitle">Sub title</label>
+                <div class="controls">
+                  <input type="text" ng-model="vmBanner.formData.subtitle" id="subtitle" name="subtitle" class="form-control" placeholder="Sub title" required>
+                </div>
+                <div class="error-messages message" ng-messages="FormName.subtitle.$error" ng-messages-multiple ng-if="vmBanner.submitted">
+                  <error-message/>
+                </div>
+              </div>
+
+              <!-- link -->
+              <div class="form-group">
+                <label class="control-label" for="link">Link</label>
+                <div class="controls">
+                  <input type="text" ng-model="vmBanner.formData.link" id="link" name="link" class="form-control" placeholder="Link" required>
+                </div>
+                <div class="error-messages message" ng-messages="FormName.link.$error" ng-messages-multiple ng-if="vmBanner.submitted">
+                  <error-message/>
+                </div>
+              </div>
+
+              <!-- image -->
+              <div class="form-group">
+                <label class="control-label" for="image">Image</label>
+                <div class="controls">
+                  <input type="file" ngf-select ng-model="vmBanner.fileTmp.image" name="image" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-change="vmBanner.uploadFile($files, 'single', 'image')" >
+                </div>
+                <div class="content-imgcustom" ng-if="vmBanner.allFile.image">
+                  <img src="{{vmBanner.allFile.image}}" class="imgcustom responsive">
+                  <span ng-click="vmBanner.removeImage('single', 'image')" class="glyphicon glyphicon-remove remove-imgcustom"></span>
+                  <i class="fa fa-crop crop-imgcustom" aria-hidden="true" ng-click="vmBanner.cropImage('single', 'image')"></i>
+                  <div class="progress progress-sm active">
+                    <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="{{vmBanner.fileProgress.image}}" aria-valuemin="0" aria-valuemax="100" style="width: {{vmBanner.fileProgress.image}}%">
+                      <span class="sr-only">{{vmBanner.fileProgress.image}}% Complete</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Description -->
+              <div class="form-group">
+                <label class="control-label" for="description">Description</label>
+                <div class="controls">
+                  <textarea class="form-control" name="description" ng-model="vmBanner.formData.description" rows="5"></textarea>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="box box-default">
+            <div class="box-body">
+              <div class="form-group">
+                <label class="control-label" for="status">Position</label>
+                <div class="controls">
+                  <select class="form-control" ng-init="vmBanner.formData.position = 'right'" data-ng-model="vmBanner.formData.position" id="position" ng-options="item.value as item.name for item in vmBanner.positions" required>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label" for="member">Category</label>
+                <div class="controls">
+
+                  <ui-select multiple ng-model="vmBanner.formData.category" theme="bootstrap" sortable="true" close-on-select="false">
+                    <ui-select-match placeholder="Select category...">{{$item.name}}</ui-select-match>
+                    <ui-select-choices repeat="cate._id as cate in vmBanner.categorys">
+                      <div ng-bind-html="cate.name | highlight: $select.search"></div>
+                      <small>ID: {{cate._id}}</small>
+                    </ui-select-choices>
+                  </ui-select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label" for="status">Status</label>
+                <div class="controls">
+                  <select class="form-control" ng-model="vmBanner.formData.status" id="status" ng-options="item.value as item.name for item in vmBanner.statuses" required>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+</section>

@@ -1,0 +1,7 @@
+/app/lib
+/app/bootstrap
+/app/config
+/app/modules/admin
+/app/modules/api
+/app/modules/graphql
+/app/templates/admin

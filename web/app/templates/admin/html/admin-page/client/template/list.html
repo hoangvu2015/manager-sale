@@ -1,0 +1,107 @@
+<section ng-init="vmPage.find()">
+  <section class="content-header">
+    <h1>List Page</h1>
+  </section>
+  <!-- Loading -->
+  <ng-loading loading-done="vmPage.isLoading" />
+  <!-- Main content -->
+  <section class="content">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="box">
+          <div class="box-header">
+            <div class="pull-left">
+              <a class="btn btn-primary" ui-sref="createPage">New</a> &nbsp;&nbsp;
+              <button class="btn btn-primary" ng-click="vmPage.openPopupChangeStatusMulti(1)">Publish</button>&nbsp;&nbsp;
+              <button class="btn btn-warning" ng-click="vmPage.openPopupChangeStatusMulti(0)">UnPublish</button>&nbsp;&nbsp;
+              <button ng-if="vmPage.search.status !=2" class="btn btn-danger" ng-click="vmPage.openPopupMoveToTrashMulti()">Move to trash</button>
+              <button ng-if="vmPage.search.status ==2" class="btn btn-danger" ng-click="vmPage.openPopupDeleteMulti()">Delete Permanent</button>
+            </div>
+          </div>
+          <hr/>
+          <!-- /.box-header -->
+          <div class="box-body">
+            <div class="box-tools">
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="form-inline filter-layout">
+                    <div class="form-group">
+                      <label class="control-label" for="filter">Keyword</label>
+                      <input type="text" name="filter" data-ng-model="vmPage.search.filter" id="filter" class="form-control" placeholder="Search" />
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label" for="status">Status</label>
+                      <select ng-change="vmPage.pageChanged(1)" class="form-control" ng-model="vmPage.search.status" id="status" ng-options="item.value as item.name for item in vmPage.statuses" required>
+                        <option value="">All status</option>
+                      </select>
+                    </div>
+                    <div class="form-group filter-submit">
+                      <a class="btn btn-primary" ng-click="vmPage.pageChanged(1)">Filter</a> &nbsp;&nbsp;
+                      <a class="btn btn-primary" ng-click="vmPage.reset()">Reset</a>
+                    </div>
+                    <hr/>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <h4><b>Summary</b></h4>
+              <p><b>Items Per Page</b>: {{vmPage.itemsPerPage}}</p>
+              <p><b>Total Page</b>: {{vmPage.totalPage}}</p>
+              <p><b>Total Items</b>: {{vmPage.totalItems}}</p>
+            </div>
+            <table id="table-list" class="table table-bordered table-hover">
+              <thead>
+                <tr>
+                  <th>
+                    <input type="checkbox" ng-model="vmPage.selectAll" ng-click="vmPage.sellectAll()" id="selectAll" />
+                  </th>
+                  <th>ID</th>
+                  <th>Title</th>
+                  <th>Status</th>
+                  <th>Created on</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr data-ng-repeat="page in vmPage.listItems | filter: query">
+                  <td>
+                    <input type="checkbox" ng-model="vmPage.rowsSelected[page._id]" />
+                  </td>
+                  <td><a data-ui-sref="editPage({id: page._id})">{{page._id}}</a></td>
+                  <td>
+                    {{page.title}}
+                  </td>
+                  <td>
+                    <a style="cursor:pointer" ng-click="vmPage.changeStatus(page._id, page.status)">
+                      <span class="label label-success" ng-if="page.status == 1">Publish </span>
+                      <span class="label label-danger" ng-if="page.status == 0">Unpublish </span>
+                    </a>
+                    <span class="label label-danger" ng-if="page.status == 2">Trashed </span>
+                  </td>
+                  <td>{{page.createdAt | date:'medium'}}</td>
+                  <td>
+                    <a style="cursor:pointer" ng-if="page.status !== 2" data-ui-sref="editPage({id: page._id})" title="Edit">
+                      <i class="glyphicon glyphicon-edit"></i></a> &nbsp; &nbsp;
+                      <a style="cursor:pointer" ng-if="page.status !== 2" title="Move to trash" ng-click="vmPage.confirmMoveToTrash(page._id)">
+                        <i class="glyphicon glyphicon-trash"></i>
+                      </a>
+                      <a style="cursor:pointer" ng-if="page.status == 2" title="Delete" ng-click="vmPage.confirmDelete(page._id)">
+                        <i class="glyphicon glyphicon-trash"></i>
+                      </a>
+                      &nbsp; &nbsp;
+                      <a style="cursor:pointer" ng-if="page.status == 2" ng-click="vmPage.putback(page._id)" title="Put back">
+                        <i class="glyphicon glyphicon-arrow-left"></i>
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <bz-pagination ng-show="vmPage.listItems.length>0" max-page="10" name="page_page" current-page="vmPage.currentPage" total-page="vmPage.totalPage" page-changed="vmPage.pageChanged">
+              </bz-pagination>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </section>

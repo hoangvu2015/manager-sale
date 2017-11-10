@@ -1,0 +1,80 @@
+cat <<"EOF" | sudo tee /etc/systemd/system/[ProjectName].service
+    [Unit]
+    Description=[ProjectName] Website
+    Requires=redis.service mongod.service
+    After=redis.service mongod.service
+
+    [Service]
+    WorkingDirectory=/srv/sites/[ProjectName]/web/
+    ExecStart=/usr/bin/node /srv/sites/[ProjectName]/web/app.js
+    Restart=always
+    RestartSec=3
+    StandardOutput=syslog
+    StandardError=syslog
+    SyslogIdentifier=[ProjectName]
+    Environment=NODE_ENV=staging CMS_WEB_PORT=CMS_WEB_PORT_NUMBER CMS_ADMIN_PORT=CMS_ADMIN_PORT_NUMBER CMS_API_PORT=CMS_API_PORT_NUMBER
+    [Install]
+    WantedBy=multi-user.target
+EOF
+sudo systemctl enable [ProjectName].service
+sudo systemctl restart [ProjectName].service
+
+cat <<"EOF" | sudo tee /etc/nginx/conf.d/[ProjectName].test.bz-dev.com.conf
+    # Main site - Front End backend
+    upstream [ProjectName]_site {
+        ip_hash;
+        server 127.0.0.1:CMS_WEB_PORT_NUMBER;
+        keepalive 8;
+    }
+    upstream [ProjectName]_api {
+        ip_hash;
+        keepalive 8;
+        server 127.0.0.1:CMS_API_PORT_NUMBER;
+    }
+    upstream [ProjectName]_cms {
+        ip_hash;
+        keepalive 8;
+        server 127.0.0.1:CMS_ADMIN_PORT_NUMBER;
+    }
+EOF
+
+cat <<"EOF" | sudo tee /etc/nginx/sites-available/[ProjectName].test.bz-dev.com
+server {
+listen  80;
+    server_name  [ProjectName].test.bz-dev.com;
+    root /srv/sites/[ProjectName]/web/public;
+    index  index.html;
+    server_tokens off;
+
+    error_log /var/log/nginx/error-[ProjectName].log;
+
+    gzip_static on;
+    gzip on;
+
+    #location ~* \.(?:jpg|jpeg|gif|png|ico|cur|gz|svg|svgz|mp4|ogg|ogv|webm|htc)$ {
+    #  expires 1M;
+    #  access_log off;
+    #  add_header Cache-Control "public";
+    #}
+
+    location ~ /v1/api {
+        proxy_set_header Host $http_host;
+        proxy_redirect off;
+        proxy_pass http://[ProjectName]_api;
+    }
+
+    location ~ /admin {
+        proxy_set_header Host $http_host;
+        proxy_redirect off;
+        proxy_pass http://[ProjectName]_cms;
+    }
+    location / {
+        proxy_pass http://[ProjectName]_site;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_redirect off;
+    }
+}
+EOF
+sudo ln -s /etc/nginx/sites-{available,enabled}/[ProjectName].test.bz-dev.com
+sudo systemctl restart nginx

@@ -1,0 +1,115 @@
+<section ng-init="vmSetting.find()">
+  <section class="content-header">
+    <h1>List Setting</h1>
+  </section>
+  <!-- Loading -->
+  <ng-loading loading-done="vmSetting.isLoading" />
+  <!-- Main content -->
+  <section class="content">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="box">
+          <div class="box-header">
+            <div class="pull-left">
+              <a class="btn btn-primary" ui-sref="createSetting">New</a> &nbsp;&nbsp;
+              <button class="btn btn-primary" ng-click="vmSetting.openPopupChangeStatusMulti(1)">Publish</button>&nbsp;&nbsp;
+              <button class="btn btn-warning" ng-click="vmSetting.openPopupChangeStatusMulti(0)">UnPublish</button>&nbsp;&nbsp;
+              <button ng-if="vmSetting.search.status !=2" class="btn btn-danger" ng-click="vmSetting.openPopupMoveToTrashMulti()">Move to trash</button>
+              <button ng-if="vmSetting.search.status ==2" class="btn btn-danger" ng-click="vmSetting.openPopupDeleteMulti()">Delete Permanent</button>
+            </div>
+          </div>
+          <hr/>
+          <!-- /.box-header -->
+          <div class="box-body">
+            <div class="box-tools">
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="form-inline filter-layout">
+                    <div class="form-group">
+                      <label class="control-label" for="filter">Keyword</label>
+                      <input type="text" name="filter" data-ng-model="vmSetting.search.filter" id="filter" class="form-control" placeholder="Search" />
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label" for="status">Status</label>
+                      <select ng-change="vmSetting.pageChanged(1)" class="form-control" ng-model="vmSetting.search.status" id="status" ng-options="item.value as item.name for item in vmSetting.statuses" required>
+                        <option value="">All status</option>
+                      </select>
+                    </div>
+                    <div class="form-group filter-submit">
+                      <a class="btn btn-primary" ng-click="vmSetting.pageChanged(1)">Filter</a> &nbsp;&nbsp;
+                      <a class="btn btn-primary" ng-click="vmSetting.reset()">Reset</a>
+                    </div>
+                    <hr/>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <h4><b>Summary</b></h4>
+              <p><b>Items Per Page</b>: {{vmSetting.itemsPerPage}}</p>
+              <p><b>Total Page</b>: {{vmSetting.totalPage}}</p>
+              <p><b>Total Items</b>: {{vmSetting.totalItems}}</p>
+            </div>
+            <table id="table-list" class="table table-bordered table-hover">
+              <thead>
+                <tr>
+                  <th>
+                    <input type="checkbox" ng-model="vmSetting.selectAll" ng-click="vmSetting.sellectAll()" id="selectAll" />
+                  </th>
+                  <th>ID</th>
+                  <th>Key</th>
+                  <th>Value</th>
+                  <th>Type</th>
+                  <th>Status</th>
+                  <th>Created on</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr data-ng-repeat="setting in vmSetting.listItems | filter: query">
+                  <td>
+                    <input type="checkbox" ng-model="vmSetting.rowsSelected[setting._id]" />
+                  </td>
+                  <td><a data-ui-sref="editSetting({id: setting._id})">{{setting._id}}</a></td>
+                  <td>
+                    {{setting.key}}
+                  </td>
+                  <td>
+                    {{setting.value}}
+                  </td>
+                  <td>
+                    {{setting.value_type}}
+                  </td>
+                  <td>
+                    <a style="cursor:pointer" ng-click="vmSetting.changeStatus(setting._id, setting.status)">
+                      <span class="label label-success" ng-if="setting.status == 1">Publish </span>
+                      <span class="label label-danger" ng-if="setting.status == 0">Unpublish </span>
+                    </a>
+                    <span class="label label-danger" ng-if="setting.status == 2">Trashed </span>
+                  </td>
+                  <td>{{setting.createdAt | date:'medium'}}</td>
+                  <td>
+                    <a style="cursor:pointer" ng-if="setting.status !== 2" data-ui-sref="editSetting({id: setting._id})" title="Edit">
+                      <i class="glyphicon glyphicon-edit"></i></a> &nbsp; &nbsp;
+                      <a style="cursor:pointer" ng-if="setting.status !== 2" title="Move to trash" ng-click="vmSetting.confirmMoveToTrash(setting._id)">
+                        <i class="glyphicon glyphicon-trash"></i>
+                      </a>
+                      <a style="cursor:pointer" ng-if="setting.status == 2" title="Delete" ng-click="vmSetting.confirmDelete(setting._id)">
+                        <i class="glyphicon glyphicon-trash"></i>
+                      </a>
+                      &nbsp; &nbsp;
+                      <a style="cursor:pointer" ng-if="setting.status == 2" ng-click="vmSetting.putback(setting._id)" title="Put back">
+                        <i class="glyphicon glyphicon-arrow-left"></i>
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <bz-pagination ng-show="vmSetting.listItems.length>0" max-page="10" name="setting_page" current-page="vmSetting.currentPage" total-page="vmSetting.totalPage" page-changed="vmSetting.pageChanged">
+              </bz-pagination>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </section>

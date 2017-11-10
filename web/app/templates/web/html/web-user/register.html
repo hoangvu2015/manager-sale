@@ -1,0 +1,46 @@
+<% extends 'web/layouts/layout.html' %>
+
+<% block content %>
+    <div class="container">
+        <div class="page-header">
+            <h1>Sign up</h1>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <form id="registerForm" name="registerForm" method="POST" novalidate>
+                    <div class="form-group">
+                        <label for="email">Name</label>
+                        <input type="text" v-validate="'required'" class="form-control" id="name" name="name" v-model="formData.name" placeholder="Name" />
+                         <div class="messages-error" v-cloak v-show="errors.has('name')">
+                            {{ errors | showInvalidMsg('name')}}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email address</label>
+                        <input type="email" class="form-control" id="email" v-validate="'required|email'" v-model="formData.email"  name="email" placeholder="Email" >
+                        <div class="messages-error" v-cloak v-show="errors.has('email')">
+                            {{ errors | showInvalidMsg('email')}}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password"  v-validate="'required|min:8'" class="form-control" id="password" name="password" v-model="formData.password" placeholder="Password">
+                         <div class="messages-error" v-cloak v-show="errors.has('password')">
+                            {{ errors | showInvalidMsg('password')}}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="cfpassword">Confirm Password</label>
+                        <input type="password" class="form-control" v-validate="'required|min:8|confirmed:password'" id="cfpassword" name="cfpassword" v-model="formData.cfpassword" placeholder="Confirm Password">
+                        <div class="messages-error" v-cloak v-show="errors.has('cfpassword')">
+                            {{ errors | showInvalidMsg('cfpassword')}}
+                        </div>
+                    </div>
+                    <p>
+                        <button type="button" class="btn btn-success" @click="register()">Sign up</button>
+                    </p>                                        
+                </form>
+            </div>
+        </div>
+    </div>
+<% endblock %>

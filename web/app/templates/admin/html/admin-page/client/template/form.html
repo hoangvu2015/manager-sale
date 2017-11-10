@@ -1,0 +1,83 @@
+<input name="image" type="file" id="upload" class="hidden" onchange="">
+<section ng-init="vmPage.findOne()">
+  <section class="content-header">
+    <h1>Page</h1>
+  </section>
+  <ng-loading loading-done="vmPage.isLoading" />
+  <!-- Main content -->
+  <section class="content">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="box box-info">
+          <div class="box-body">
+              <div ng-if="!vmPage.queryParams.id" class="form-group">
+                <a class="btn btn-primary" ng-click="vmPage.create(FormName.$valid, 'save&list')">Save &amp; List</a> &nbsp;&nbsp;
+                <a class="btn btn-primary" ng-click="vmPage.create(FormName.$valid, 'apply')">Apply</a>&nbsp;&nbsp;
+                <input type="button" value="Cancel" class="btn btn-default" ng-click="vmPage.gotoList()">&nbsp;&nbsp;
+              </div>
+              <div ng-if="vmPage.queryParams.id" class="form-group">
+                <a class="btn btn-primary" ng-click="vmPage.update(FormName.$valid, 'save&list')">Save &amp; List</a> &nbsp;&nbsp;
+                <a class="btn btn-primary" ng-click="vmPage.update(FormName.$valid, 'apply')">Apply</a>&nbsp;&nbsp;
+                <input type="button" value="Cancel" class="btn btn-default" ng-click="vmPage.gotoList()">&nbsp;&nbsp;
+              </div>
+            </div>
+        </div>
+      </div>
+      <form novalidate name="FormName">
+        <div class="col-md-8">
+          <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">{{vmPage.queryParams.id ? 'Edit' : 'New'}} Page</h3>
+            </div>
+            <div class="box-body">
+
+              <!-- Title -->
+              <div class="form-group">
+                <label class="control-label" for="title">Title</label>
+                <div class="controls">
+                  <input type="text" ng-model="vmPage.formData.title" ng-change="vmPage.checkSlug(vmPage.formData.title)" id="title" name="title" class="form-control" placeholder="Title" required>
+                </div>
+                <div class="error-messages message" ng-messages="FormName.title.$error" ng-messages-multiple ng-if="vmPage.submitted">
+                  <error-message/>
+                </div>
+              </div>
+
+              <!-- Slug -->
+              <div class="form-group">
+                <label class="control-label" for="slug">Slug</label>
+                <div class="controls">
+                  <input type="text" ng-model="vmPage.formData.slug" id="slug" name="slug" class="form-control" placeholder="Slug">
+                </div>
+              </div>
+
+              <!-- content -->
+              <div class="form-group">
+                <label class="control-label" for="content">content</label>
+                <div class="controls">
+                  <textarea class="form-control" ui-tinymce="vmPage.tinymceOptions" name="content" ng-model="vmPage.formData.content" rows="5" required></textarea>
+                </div>
+                <div class="error-messages message" ng-messages="FormName.content.$error" ng-messages-multiple ng-if="vmPage.submitted">
+                  <error-message/>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="box box-default">
+            <div class="box-body">
+              <div class="form-group">
+                <label class="control-label" for="status">Status</label>
+                <div class="controls">
+                  <select class="form-control" ng-model="vmPage.formData.status" id="status" ng-options="item.value as item.name for item in vmPage.statuses" required>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+</section>

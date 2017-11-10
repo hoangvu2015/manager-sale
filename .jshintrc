@@ -1,0 +1,15 @@
+{
+  "esversion": 6,
+  "boss": true,
+  "node": true,
+  "eqeqeq": true,
+  "strict": false,
+  "newcap": false,
+  "undef": true,
+  "unused": false,
+  "onecase": true,
+  "lastsemic": true,
+  "globals": {
+    "alert": false
+  }
+}

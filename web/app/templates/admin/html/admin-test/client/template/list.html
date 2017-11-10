@@ -1,0 +1,128 @@
+<section ng-init="vmTest.find()">
+  <section class="content-header">
+    <h1>List Test</h1>
+  </section>
+  <!-- Loading -->
+  <ng-loading loading-done="vmTest.isLoading" />
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <div class="pull-left">
+                <a class="btn btn-primary" ui-sref="createTest">New</a> &nbsp;&nbsp;
+                <button class="btn btn-primary" ng-click="vmTest.openPopupChangeStatusMulti(1)">Publish</button>&nbsp;&nbsp;
+                <button class="btn btn-warning" ng-click="vmTest.openPopupChangeStatusMulti(0)">UnPublish</button>&nbsp;&nbsp;
+                <button ng-if="vmTest.search.status !=2" class="btn btn-danger" ng-click="vmTest.openPopupMoveToTrashMulti()">Move to trash</button>
+                <button ng-if="vmTest.search.status ==2" class="btn btn-danger" ng-click="vmTest.openPopupDeleteMulti()">Delete Permanent</button>
+              </div>
+            </div>
+            <hr/>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div class="box-tools">
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="form-inline filter-layout">
+                      <div class="form-group">
+                        <label class="control-label" for="filter">Keyword</label>
+                        <input type="text" name="filter" data-ng-model="vmTest.search.filter" id="filter" class="form-control" placeholder="Search" />
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label" for="status">Status</label>
+                        <select ng-change="vmTest.pageChanged(1)" class="form-control" ng-model="vmTest.search.status" id="status" ng-options="item.value as item.name for item in vmTest.statuses" required>
+                          <option value="">All status</option>
+                        </select>
+                      </div>
+                      <div class="form-group filter-submit">
+                        <a class="btn btn-primary" ng-click="vmTest.pageChanged(1)">Filter</a> &nbsp;&nbsp;
+                        <a class="btn btn-primary" ng-click="vmTest.reset()">Reset</a>
+                      </div>
+                      <hr/>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <h4><b>Summary</b></h4>
+                <p><b>Items Per Page</b>: {{vmTest.itemsPerPage}}</p>
+                <p><b>Total Page</b>: {{vmTest.totalPage}}</p>
+                <p><b>Total Items</b>: {{vmTest.totalItems}}</p>
+              </div>
+              <table id="table-list" class="table table-bordered table-hover">
+                <thead>
+                  <tr>
+                    <th>
+                      <input type="checkbox" ng-model="vmTest.selectAll" ng-click="vmTest.sellectAll()" id="selectAll" />
+                    </th>
+                    <th>ID</th>
+                    <th>Tiêu đề</th>
+                    <th>Slug</th>
+                    <th>Số</th>
+                    <th>Hình Thumb</th>
+                    <th>Thư viện ảnh</th>
+                    <th>Ngày</th>
+                    <th>Danh mục</th>
+                    <th>Loại</th>
+                    <th>Status</th>
+                    <th>Created on</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr data-ng-repeat="test in vmTest.listItems | filter: query">
+                    <td>
+                      <input type="checkbox" ng-model="vmTest.rowsSelected[test._id]" />
+                    </td>
+                    <td><a data-ui-sref="editTest({id: test._id})">{{test._id}}</a></td>
+                    
+                    <td>{{test.title}}</td>
+                                                                                                                                                                
+                    <td>{{test.slug}}</td>
+                                                                                                                                                                
+                    <td>{{test.num}}</td>
+                                                                                                                                                                                                                                                
+                    <td><img src="{{test.thumb}}" alt="" width="50px" height="50px"></td>
+                                                                                                                                                                                    
+                    <td><span ng-repeat="item in test.gallery"><img src="{{item}}" alt="" width="50px" height="50px"></span></td>
+                                                                                                                        
+                    <td>{{test.date | date:'medium'}}</td>
+                                                                                                                                                                                                                                                
+                    <td><span ng-repeat="item in vmTest.categorys | filterContains:test.category:'_id':'name'"><span class="label label-info">{{item.name}}</span>&nbsp</span></td>
+                                                                                                                                                                
+                    <td><span ng-repeat="item in vmTest.options | filterContains:test.option:'key':'value'"><span class="label label-info">{{item.value}}</span>&nbsp</span></td>
+                                                            
+                    <td>
+                      <a style="cursor:pointer" ng-click="vmTest.changeStatus(test._id, test.status)">
+                        <span class="label label-success" ng-if="test.status == 1">Publish </span>
+                        <span class="label label-danger" ng-if="test.status == 0">Unpublish </span>
+                      </a>
+                      <span class="label label-danger" ng-if="test.status == 2">Trashed </span>
+                    </td>
+                    <td>{{test.createdAt | date:'medium'}}</td>
+                    <td>
+                      <a style="cursor:pointer" ng-if="test.status !== 2" data-ui-sref="editTest({id: test._id})" title="Edit">
+                        <i class="glyphicon glyphicon-edit"></i></a> &nbsp; &nbsp;
+                        <a style="cursor:pointer" ng-if="test.status !== 2" title="Move to trash" ng-click="vmTest.confirmMoveToTrash(test._id)">
+                          <i class="glyphicon glyphicon-trash"></i>
+                        </a>
+                        <a style="cursor:pointer" ng-if="test.status == 2" title="Delete" ng-click="vmTest.confirmDelete(test._id)">
+                          <i class="glyphicon glyphicon-trash"></i>
+                        </a>
+                        &nbsp; &nbsp;
+                        <a style="cursor:pointer" ng-if="test.status == 2" ng-click="vmTest.putback(test._id)" title="Put back">
+                          <i class="glyphicon glyphicon-arrow-left"></i>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <bz-pagination ng-show="vmTest.listItems.length>0" max-page="10" name="test_page" current-page="vmTest.currentPage" total-page="vmTest.totalPage" page-changed="vmTest.pageChanged">
+                </bz-pagination>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>

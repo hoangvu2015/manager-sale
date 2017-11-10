@@ -1,0 +1,12 @@
+app/config/development.conf.js
+app/config/production.conf.js
+app/config/staging.conf.js
+
+node_modules
+public/assets/dist
+test-nw-reports
+var/*.log
+*.log
+.vscode
+.idea
+package-lock.json

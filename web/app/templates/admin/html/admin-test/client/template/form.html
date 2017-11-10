@@ -1,0 +1,175 @@
+<input name="image" type="file" id="upload" class="hidden" onchange="">
+<section ng-init="vmTest.findOne()">
+  <section class="content-header">
+    <h1>Test</h1>
+  </section>
+  <ng-loading loading-done="vmTest.isLoading" />
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="box box-info">
+            <div class="box-body">
+              <div ng-if="!vmTest.queryParams.id" class="form-group">
+                <a class="btn btn-primary" ng-click="vmTest.create(FormName.$valid, 'save&list')">Save &amp; List</a> &nbsp;&nbsp;
+                <a class="btn btn-primary" ng-click="vmTest.create(FormName.$valid, 'apply')">Apply</a>&nbsp;&nbsp;
+                <input type="button" value="Cancel" class="btn btn-default" ng-click="vmTest.gotoList()">&nbsp;&nbsp;
+              </div>
+              <div ng-if="vmTest.queryParams.id" class="form-group">
+                <a class="btn btn-primary" ng-click="vmTest.update(FormName.$valid, 'save&list')">Save &amp; List</a> &nbsp;&nbsp;
+                <a class="btn btn-primary" ng-click="vmTest.update(FormName.$valid, 'apply')">Apply</a>&nbsp;&nbsp;
+                <input type="button" value="Cancel" class="btn btn-default" ng-click="vmTest.gotoList()">&nbsp;&nbsp;
+              </div>
+            </div>
+          </div>
+        </div>
+        <form novalidate name="FormName">
+          <div class="col-md-8">
+            <div class="box box-primary">
+              <div class="box-header with-border">
+                <h3 class="box-title">{{vmTest.queryParams.id ? 'Edit' : 'New'}} Test</h3>
+              </div>
+              <div class="box-body">
+                                
+                <!-- title -->
+                <div class="form-group">
+                  <label class="control-label" for="title">Tiêu đề</label>
+                  <div class="controls">
+                    <input type="text" ng-model="vmTest.formData.title" ng-change="vmTest.checkSlug(vmTest.formData.title)" id="title" name="title" class="form-control" placeholder="Tiêu đề" required>
+                  </div>
+                  <div class="error-messages message" ng-messages="FormName.title.$error" ng-messages-multiple ng-if="vmTest.submitted">
+                    <error-message/>
+                  </div>
+                </div>
+                                                                                                                                                                                
+                <!-- slug -->
+                <div class="form-group">
+                  <label class="control-label" for="slug">Slug</label>
+                  <div class="controls">
+                    <input type="text" ng-model="vmTest.formData.slug" id="slug" name="slug" class="form-control" placeholder="Slug" required>
+                  </div>
+                  <div class="error-messages message" ng-messages="FormName.slug.$error" ng-messages-multiple ng-if="vmTest.submitted">
+                    <error-message/>
+                  </div>
+                </div>
+                                                                                                                                                                                                
+                <!-- num -->
+                <div class="form-group">
+                  <label class="control-label" for="num">Số</label>
+                  <div class="controls">
+                    <input type="number" ng-model="vmTest.formData.num" id="num" name="num" class="form-control" placeholder="Số">
+                  </div>
+                </div>
+                                                                                                                                                                                                
+                <!-- description -->
+                <div class="form-group">
+                  <label class="control-label" for="description">Mô tả</label>
+                  <div class="controls">
+                    <textarea class="form-control" ui-tinymce="vmTest.tinymceOptions" name="description" ng-model="vmTest.formData.description" rows="5"></textarea>
+                  </div>
+                </div>
+                                                                                                                                                                                                
+                <!-- thumb -->
+                <div class="form-group">
+                  <label class="control-label" for="thumb">Hình Thumb</label>
+                  <div class="controls">
+                    <input type="file" ngf-select ng-model="vmTest.fileTmp.thumb" name="thumb" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-change="vmTest.uploadFile($files, 'single', 'thumb')" >
+                  </div>
+                  <div class="content-imgcustom" ng-if="vmTest.allFile.thumb">
+                    <img src="{{vmTest.allFile.thumb}}" class="imgcustom responsive">
+                    <span ng-click="vmTest.removeImage('single', 'thumb')" class="glyphicon glyphicon-remove remove-imgcustom"></span>
+                    <i class="fa fa-crop crop-imgcustom" aria-hidden="true" ng-click="vmTest.cropImage('single', 'thumb')"></i>
+                    <div class="progress progress-sm active">
+                      <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="{{vmTest.fileProgress.thumb}}" aria-valuemin="0" aria-valuemax="100" style="width: {{vmTest.fileProgress.thumb}}%">
+                        <span class="sr-only">{{vmTest.fileProgress.thumb}}% Complete</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                                                                                                                                                                                                
+                <!-- gallery -->
+                <div class="form-group">
+                  <label class="control-label" for="gallery">Thư viện ảnh</label>
+                  <div class="controls">
+                    <input type="file" ngf-select multiple ng-model="vmTest.fileTmp.gallery" name="gallery" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-change="vmTest.uploadFile($files, 'multi', 'gallery')">
+                  </div>
+                  <div class="content-imgcustom" ng-if="vmTest.allFile.gallery" ng-repeat="(key, value) in vmTest.allFile.gallery">
+                    <img ng-show="value" src="{{value}}" class="imgcustom responsive">
+                    <span ng-click="vmTest.removeImage('multi', 'gallery', key)" ng-show="value" class="glyphicon glyphicon-remove remove-imgcustom"></span>
+                    <i class="fa fa-crop crop-imgcustom" aria-hidden="true" ng-click="vmTest.cropImage('multi', 'gallery', key)"></i>
+                    <div class="progress progress-sm active">
+                      <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="{{vmTest.fileProgress.gallery}}" aria-valuemin="0" aria-valuemax="100" style="width: {{vmTest.fileProgress.gallery}}%">
+                        <span class="sr-only">{{vmTest.fileProgress.gallery}}% Complete</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                                                                                                                                                                                                
+                <!-- date -->
+                <div class="form-group">
+                  <label class="control-label" for="date">Ngày</label>
+                  <div class="input-group date">
+                    <div class="input-group-addon">
+                      <i class="fa fa-calendar"></i>
+                    </div>
+                    <input type="text" class="form-control pull-right" placeholder="Date" id="date" ng-model="vmTest.formData.date" bz-date-time-picker bz-options="vmTest.dateOptdate">
+                  </div>
+                </div>
+                                                                                                                                                                                                
+                <!-- date_range -->
+                <div class="form-group">
+                  <label class="control-label" for="date_range">Khoảng thời gian</label>
+                  <div class="input-group date">
+                    <div class="input-group-addon">
+                      <i class="fa fa-calendar"></i>
+                    </div>
+                    <input type="text" class="form-control pull-right" id="date_range" placeholder="Date Range" ng-model="vmTest.formData.date_range" bz-date-time-picker bz-options="vmTest.dateOptdate_range">
+                  </div>
+                </div>
+                                                                                                                                                                                                                
+                <!-- category -->
+                <div class="form-group">
+                  <label class="control-label" for="category">Danh mục</label>
+                  <div class="controls">
+                    <ui-select multiple ng-model="vmTest.formData.category" theme="bootstrap" sortable="true" close-on-select="false">
+                      <ui-select-match placeholder="Select category...">{{$item.name}}</ui-select-match>
+                      <ui-select-choices repeat="item._id as item in vmTest.categorys">
+                        <div ng-bind-html="item.name | highlight: $select.search"></div>
+                        <small>ID: {{item._id}}</small>
+                      </ui-select-choices>
+                    </ui-select>
+                  </div>
+                </div>
+                                                                                                                                                                
+                <!-- option -->
+                <div class="form-group">
+                  <label class="control-label" for="option">Loại</label>
+                  <div class="controls">
+                    <select class="form-control" ng-init="vmTest.formData.option = 1" ng-model="vmTest.formData.option" id="option" ng-options="item.key as item.value for item in vmTest.options">
+                    </select>
+                  </div>
+                </div>
+                                                
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="box box-default">
+              <div class="box-body">
+
+                <!-- Status -->
+                <div class="form-group">
+                  <label class="control-label" for="status">Status</label>
+                  <div class="controls">
+                    <select class="form-control" ng-init="vmTest.formData.status = 1" ng-model="vmTest.formData.status" id="status" ng-options="item.value as item.name for item in vmTest.statuses" required>
+                    </select>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+  </section>

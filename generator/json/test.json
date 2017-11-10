@@ -1,0 +1,104 @@
+{
+  "name": {
+    "form":{
+      "label": "Tên SV",
+      "type": "text",
+      "slug": true,
+      "list": true
+    },
+    "schema": {
+      "type": "String",
+      "default": "",
+      "required": "Please fill name",
+      "trim": true
+    }
+  },
+  "slug": {
+    "form":{
+      "label": "Slug",
+      "type": "text"
+    },
+    "schema": {
+      "type": "String",
+      "default": "",
+      "trim": true
+    }
+  },
+  "score": {
+    "form":{
+      "label": "Điểm",
+      "type": "number",
+      "list": true
+    },
+    "schema": {
+      "type": "Number",
+      "default": 1
+    }
+  },
+  "avatar": {
+    "form":{
+      "label": "Hình đại diện",
+      "type": "image",
+      "list": true
+    },
+    "schema": {
+      "type": "String",
+      "default": "",
+      "trim": true
+    }
+  },
+  "dob": {
+    "form":{
+      "label": "Ngày Sinh",
+      "type": "date",
+      "list": true
+    },
+    "schema": {
+      "type": "Date"
+    }
+  },
+  "post": {
+    "form":{
+      "label": "Bài viết",
+      "type": "multi_select",
+      "list": true,
+      "service": {
+        "name": "PostSvc",
+        "module": "post",
+        "key": "_id",
+        "value": "title"
+      }
+    },
+    "schema": [{
+      "type": "Schema.ObjectId",
+      "ref": "Post"
+    }]
+  },
+  "contact": {
+    "form":{
+      "label": "Liên hệ",
+      "type": "multi_select",
+      "list": true,
+      "service": {
+        "name": "ContactSvc",
+        "module": "contact",
+        "key": "_id",
+        "value": "name"
+      }
+    },
+    "schema": [{
+      "type": "Schema.ObjectId",
+      "ref": "Post"
+    }]
+  },
+  "option": {
+    "form":{
+      "label": "Tùy chọn",
+      "type": "select",
+      "list": true
+    },
+    "schema": {
+      "type": "String"
+    }
+  }
+}

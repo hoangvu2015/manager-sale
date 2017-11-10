@@ -1,0 +1,17 @@
+<li class="treeview">
+  <a href="#">
+    <i class="fa fa-table"></i>
+    <span>File Manager</span>
+    <span class="pull-right-container">
+      <i class="fa fa-angle-left pull-right"></i>
+    </span>
+  </a>
+  <ul class="treeview-menu">
+    <!-- =========================File Manager========================= -->
+    <li ng-if="pageMethods.authSvc.isAdmin" ng-class="{'active':pageData.menuType === 'list-file'}" class="treeview">
+      <a data-ui-sref="listFiles()">
+        <i class="fa fa-circle-o text-aqua"></i> <span> List file manager</span>
+      </a>
+    </li>
+  </ul>
+</li>

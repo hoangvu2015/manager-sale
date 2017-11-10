@@ -1,0 +1,11 @@
+{
+    "preset":"airbnb",
+    "disallowEmptyBlocks": false,
+    "requireSemicolons": false,
+    "disallowMultipleLineBreaks": false,
+    "disallowSpacesInFunctionDeclaration": false,
+    "requirePaddingNewLinesAfterBlocks": false,
+    "requirePaddingNewLinesBeforeLineComments": false,
+    "requireTrailingComma": false,
+    "excludeFiles": ["node_modules/**"]
+}

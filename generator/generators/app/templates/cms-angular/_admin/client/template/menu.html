@@ -1,0 +1,25 @@
+<li class="treeview">
+  <a href="#">
+    <i class="fa fa-table"></i>
+    <span><%= modelName %>s</span>
+    <span class="pull-right-container">
+      <i class="fa fa-angle-left pull-right"></i>
+    </span>
+  </a>
+  <ul class="treeview-menu">
+    <!-- =========================<%= modelName %>s========================= -->
+    <li ng-if="pageMethods.authSvc.isAdmin" ng-class="{'active':pageData.menuType === 'list-<%= moduleName %>'}" class="treeview">
+      <a data-ui-sref="list<%= modelName %>()">
+        <i class="fa fa-circle-o text-aqua"></i> <span> List <%= moduleName %>s</span>
+      </a>
+    </li>
+
+    <!-- =========================<%= modelName %>s========================= -->
+    <li ng-if="pageMethods.authSvc.isAdmin" ng-class="{'active':pageData.menuType === 'create-<%= moduleName %>'}" class="treeview">
+      <a ui-sref="create<%= modelName %>()">
+        <i class="fa fa-circle-o text-aqua"></i> <span> Create <%= moduleName %></span>
+      </a>
+    </li>
+    <!-- =========================END <%= modelName %>s========================= -->
+  </ul>
+</li>

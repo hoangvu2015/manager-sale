@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <% include "web/layouts/partials/header.html" %>
+</head>
+<body ng-app="myapp" class="<% block bodyClass %><% endblock %>">
+    <% include "web/html/web-navigation/navigation.html" %>
+    <div class="view-container visibility">
+        <% block content %>
+        <% endblock %>
+        <% include "web/layouts/partials/popup/cropper/view.html" %>
+        <% include "web/layouts/partials/footer.html" %>
+    </div>
+    <!-- /container -->
+    <% include "web/layouts/partials/loading/index.html" %>
+    <% include "web/layouts/partials/scroll-to-top/index.html" %>
+
+    <% block jsInline %>
+    <% endblock %>            
+</body>
+</html>

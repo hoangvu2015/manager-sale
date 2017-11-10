@@ -1,0 +1,81 @@
+<% extends 'web/layouts/layout.html' %>
+
+<% block content %>
+    <div id="mod-login" class="container" ng-controller="AuthController as auth">
+        <div class="page-header">
+            <h1>{{header || 'Login'}}</h1>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div id="loginForm">
+                    <form id="userLogin" name="loginForm" method="POST" autocomplete="off" @submit.prevent="validateBeforeSubmit" ng-submit="login($event)"
+                        novalidate>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <div class="msg-input">
+                                <input type="email" class="form-control" id="email" v-validate="'required|email'" v-model="formData.email" ng-model="auth.formData.email"
+                                    name="email" placeholder="Email" required>
+                                <div class="messages-error" v-cloak v-show="errors.has('email')">
+                                    {{ errors.first('email')}}  <!-- | showInvalidMsg('password') -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <div class="msg-input">
+                                <input type="password" class="form-control" id="password" v-validate="{ rules: { required: true, min: 6 } }" v-model="formData.password"
+                                    ng-model="auth.formData.password" name="password" placeholder="Password" required>
+                                <div class="messages-error" v-cloak v-show="errors.has('password')">
+                                    {{ errors.first('password') }} <!-- | showInvalidMsg('password') -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <a href="/forgot">Forgot password ? </a>
+                            <br/> I am a new member ?
+                            <a href="/register">Sign up here</a>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-success">Login</button>
+                            <button v-if="authorized" type="button" @click="logoutFB()" class="btn btn-default">Logout Facebook</button>
+                            <button v-else="authorized" type="button" v-on:click="loginFB" ng-click="loginFB()" class="btn btn-success">Login with Facebook</button>
+                            <button type="button" v-on:click="loginGG" ng-click="loginGG()" class="btn btn-success">Login with Google</button>
+                        </div>
+                    </form>
+
+                    <div class="clearfix"></div>
+                    <div v-if="ready" class="">
+                        <div v-if="authorized" class="">
+                            <profile :profile="profile"></profile>
+                        </div>
+                    </div>
+
+                    <div v-else="ready" class="">
+                        not ready for facebook login
+                    </div>
+                    <div class="clearfix"></div>
+
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <a class="btn" @click="toggleShow">Set Avatar</a>
+                <my-upload field="img"
+                           @crop-success="cropSuccess"
+                           @crop-upload-success="cropUploadSuccess"
+                           @crop-upload-fail="cropUploadFail"
+                           v-model="show"
+                           :width="300"
+                           :height="300"
+                           :url="uploadUrl"
+                           :params="params"
+                           :headers="headers"
+                           :lang-type="'vi'"
+                           img-format="png"></my-upload>
+
+                <img :src="imgDataUrl">
+            </div>
+        </div>
+    </div>
+<% endblock %>

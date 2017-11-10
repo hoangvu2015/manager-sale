@@ -1,0 +1,124 @@
+<section ng-init="vm<%= modelName %>.find()">
+  <section class="content-header">
+    <h1>List <%= modelName %></h1>
+  </section>
+  <!-- Loading -->
+  <ng-loading loading-done="vm<%= modelName %>.isLoading" />
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <div class="pull-left">
+                <a class="btn btn-primary" ui-sref="create<%= modelName %>">New</a> &nbsp;&nbsp;
+                <button class="btn btn-primary" ng-click="vm<%= modelName %>.openPopupChangeStatusMulti(1)">Publish</button>&nbsp;&nbsp;
+                <button class="btn btn-warning" ng-click="vm<%= modelName %>.openPopupChangeStatusMulti(0)">UnPublish</button>&nbsp;&nbsp;
+                <button ng-if="vm<%= modelName %>.search.status !=2" class="btn btn-danger" ng-click="vm<%= modelName %>.openPopupMoveToTrashMulti()">Move to trash</button>
+                <button ng-if="vm<%= modelName %>.search.status ==2" class="btn btn-danger" ng-click="vm<%= modelName %>.openPopupDeleteMulti()">Delete Permanent</button>
+              </div>
+            </div>
+            <hr/>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div class="box-tools">
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="form-inline filter-layout">
+                      <div class="form-group">
+                        <label class="control-label" for="filter">Keyword</label>
+                        <input type="text" name="filter" data-ng-model="vm<%= modelName %>.search.filter" id="filter" class="form-control" placeholder="Search" />
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label" for="status">Status</label>
+                        <select ng-change="vm<%= modelName %>.pageChanged(1)" class="form-control" ng-model="vm<%= modelName %>.search.status" id="status" ng-options="item.value as item.name for item in vm<%= modelName %>.statuses" required>
+                          <option value="">All status</option>
+                        </select>
+                      </div>
+                      <div class="form-group filter-submit">
+                        <a class="btn btn-primary" ng-click="vm<%= modelName %>.pageChanged(1)">Filter</a> &nbsp;&nbsp;
+                        <a class="btn btn-primary" ng-click="vm<%= modelName %>.reset()">Reset</a>
+                      </div>
+                      <hr/>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <h4><b>Summary</b></h4>
+                <p><b>Items Per Page</b>: {{vm<%= modelName %>.itemsPerPage}}</p>
+                <p><b>Total Page</b>: {{vm<%= modelName %>.totalPage}}</p>
+                <p><b>Total Items</b>: {{vm<%= modelName %>.totalItems}}</p>
+              </div>
+              <table id="table-list" class="table table-bordered table-hover">
+                <thead>
+                  <tr>
+                    <th>
+                      <input type="checkbox" ng-model="vm<%= modelName %>.selectAll" ng-click="vm<%= modelName %>.sellectAll()" id="selectAll" />
+                    </th>
+                    <th>ID</th><% for (key in formInfo) { %><% if ((formInfo[key].type == 'text' || formInfo[key].type == 'ckeditor' || formInfo[key].type == 'date' || formInfo[key].type == 'number' || formInfo[key].type == 'image' || formInfo[key].type == 'images' || formInfo[key].type == 'select' || formInfo[key].type == 'multi_select') && formInfo[key].list) { %>
+                    <th><%= formInfo[key].label %></th><% } -%><% } %>
+                    <th>Status</th>
+                    <th>Created on</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr data-ng-repeat="<%= moduleName %> in vm<%= modelName %>.listItems | filter: query">
+                    <td>
+                      <input type="checkbox" ng-model="vm<%= modelName %>.rowsSelected[<%= moduleName %>._id]" />
+                    </td>
+                    <td><a data-ui-sref="edit<%= modelName %>({id: <%= moduleName %>._id})">{{<%= moduleName %>._id}}</a></td>
+                    <% for (key in formInfo) { %><% if (formInfo[key].list) { %><% if (formInfo[key].type == 'text' || formInfo[key].type == 'number') { %>
+                    <td>{{<%= moduleName %>.<%= key%>}}</td>
+                    <% } -%>
+                    <% if (formInfo[key].type == 'ckeditor') { %>
+                    <td><div ng-bind-html="<%= moduleName %>.<%= key%>"></div></td>
+                    <% } -%>
+                    <% if (formInfo[key].type == 'date') { %>
+                    <td>{{<%= moduleName %>.<%= key%> | date:'medium'}}</td>
+                    <% } -%>
+                    <% if (formInfo[key].type == 'image') { %>
+                    <td><img src="{{<%= moduleName %>.<%= key%>}}" alt="" width="50px" height="50px"></td>
+                    <% } -%>
+                    <% if (formInfo[key].type == 'images') { %>
+                    <td><span ng-repeat="item in <%= moduleName %>.<%= key%>"><img src="{{item}}" alt="" width="50px" height="50px"></span></td>
+                    <% } -%>
+                    <% if (formInfo[key].type == 'select' || formInfo[key].type == 'multi_select') { %>
+                    <td><span ng-repeat="item in vm<%= modelName %>.<%= key%>s | filterContains:<%= moduleName %>.<%= key%>:'<% if (formInfo[key].service && formInfo[key].service.name && formInfo[key].service.key) { %><%= formInfo[key].service.key%><% }else{ %>key<% } %>':'<% if (formInfo[key].service && formInfo[key].service.name && formInfo[key].service.value) { %><%= formInfo[key].service.value%><% }else{ %>value<% } %>'"><span class="label label-info">{{item.<% if (formInfo[key].service && formInfo[key].service.name && formInfo[key].service.value) { %><%= formInfo[key].service.value%><% }else{ %>value<% } %>}}</span>&nbsp</span></td>
+                    <% } -%>
+                    <% } -%>
+                    <% } %>
+                    <td>
+                      <a style="cursor:pointer" ng-click="vm<%= modelName %>.changeStatus(<%= moduleName %>._id, <%= moduleName %>.status)">
+                        <span class="label label-success" ng-if="<%= moduleName %>.status == 1">Publish </span>
+                        <span class="label label-danger" ng-if="<%= moduleName %>.status == 0">Unpublish </span>
+                      </a>
+                      <span class="label label-danger" ng-if="<%= moduleName %>.status == 2">Trashed </span>
+                    </td>
+                    <td>{{<%= moduleName %>.createdAt | date:'medium'}}</td>
+                    <td>
+                      <a style="cursor:pointer" ng-if="<%= moduleName %>.status !== 2" data-ui-sref="edit<%= modelName %>({id: <%= moduleName %>._id})" title="Edit">
+                        <i class="glyphicon glyphicon-edit"></i></a> &nbsp; &nbsp;
+                        <a style="cursor:pointer" ng-if="<%= moduleName %>.status !== 2" title="Move to trash" ng-click="vm<%= modelName %>.confirmMoveToTrash(<%= moduleName %>._id)">
+                          <i class="glyphicon glyphicon-trash"></i>
+                        </a>
+                        <a style="cursor:pointer" ng-if="<%= moduleName %>.status == 2" title="Delete" ng-click="vm<%= modelName %>.confirmDelete(<%= moduleName %>._id)">
+                          <i class="glyphicon glyphicon-trash"></i>
+                        </a>
+                        &nbsp; &nbsp;
+                        <a style="cursor:pointer" ng-if="<%= moduleName %>.status == 2" ng-click="vm<%= modelName %>.putback(<%= moduleName %>._id)" title="Put back">
+                          <i class="glyphicon glyphicon-arrow-left"></i>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <bz-pagination ng-show="vm<%= modelName %>.listItems.length>0" max-page="10" name="<%= moduleName %>_page" current-page="vm<%= modelName %>.currentPage" total-page="vm<%= modelName %>.totalPage" page-changed="vm<%= modelName %>.pageChanged">
+                </bz-pagination>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>

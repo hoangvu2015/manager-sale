@@ -1,0 +1,64 @@
+<% extends 'web/layouts/layout.html' %>
+<% block content %>
+<div class="container">
+  <div class="row">
+    <div class="col-md-4">
+      <label role="switcher">
+        <input type="checkbox">
+        <i></i>
+        <span></span>
+      </label>
+      <br>
+      <label role="switcher">
+        <input type="checkbox" checked>
+        <i></i>
+        <span></span>
+      </label>
+      <br>
+      <label role="switcher">
+        <input type="checkbox" checked disabled>
+        <i></i>
+        <span></span>
+      </label>
+    </div>
+    <div class="col-md-4">
+      <label role="checkbox" for="check1">
+        <input role="checkbox" id="check1" type="checkbox">
+        <i></i>
+        <span>Normal</span>
+      </label>
+      <br>
+      <label role="checkbox" for="check2">
+        <input role="checkbox" id="check2" type="checkbox" checked>
+        <i></i>
+        <span>Checked</span>
+      </label>
+      <br>
+      <label role="checkbox" for="check3">
+        <input role="checkbox" id="check3" type="checkbox" checked disabled>
+        <i></i>
+        <span>Disabled</span>
+      </label>
+    </div>
+    <div class="col-md-4">
+      <label role="radio" for="opt2">
+        <input role="radio" id="opt2" type="radio" name="radioGroup">
+        <i></i>
+        <span>Normal</span>
+      </label>
+      <br>
+      <label role="radio" for="opt1">
+        <input role="radio" id="opt1" type="radio" name="radioGroup" checked>
+        <i></i>
+        <span>Selected</span>
+      </label>
+      <br>
+      <label role="radio" for="opt3">
+        <input role="radio" id="opt3" type="radio" checked disabled>
+        <i></i>
+        <span>Disabled</span>
+      </label>
+    </div>
+  </div>
+</div>
+<% endblock %>

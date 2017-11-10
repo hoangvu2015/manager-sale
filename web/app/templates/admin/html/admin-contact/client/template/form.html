@@ -1,0 +1,108 @@
+<input name="image" type="file" id="upload" class="hidden" onchange="">
+<section ng-init="vmContact.findOne()">
+  <section class="content-header">
+    <h1>Contact</h1>
+  </section>
+  <ng-loading loading-done="vmContact.isLoading" />
+  <!-- Main content -->
+  <section class="content">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="box box-info">
+          <div class="box-body">
+              <div ng-if="!vmContact.queryParams.id" class="form-group">
+                <a class="btn btn-primary" ng-click="vmContact.create(FormName.$valid, 'save&list')">Save &amp; List</a> &nbsp;&nbsp;
+                <a class="btn btn-primary" ng-click="vmContact.create(FormName.$valid, 'apply')">Apply</a>&nbsp;&nbsp;
+                <input type="button" value="Cancel" class="btn btn-default" ng-click="vmContact.gotoList()">&nbsp;&nbsp;
+              </div>
+              <div ng-if="vmContact.queryParams.id" class="form-group">
+                <a class="btn btn-primary" ng-click="vmContact.update(FormName.$valid, 'save&list')">Save &amp; List</a> &nbsp;&nbsp;
+                <a class="btn btn-primary" ng-click="vmContact.update(FormName.$valid, 'apply')">Apply</a>&nbsp;&nbsp;
+                <input type="button" value="Cancel" class="btn btn-default" ng-click="vmContact.gotoList()">&nbsp;&nbsp;
+              </div>
+            </div>
+        </div>
+      </div>
+      <form novalidate name="FormName">
+        <div class="col-md-8">
+          <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">{{vmContact.queryParams.id ? 'Edit' : 'New'}} Contact</h3>
+            </div>
+            <div class="box-body">
+
+              <!-- name -->
+              <div class="form-group">
+                <label class="control-label" for="name">name</label>
+                <div class="controls">
+                  <input type="text" ng-model="vmContact.formData.name" id="name" name="name" class="form-control" placeholder="name" required>
+                </div>
+                <div class="error-messages message" ng-messages="FormName.name.$error" ng-messages-multiple ng-if="vmContact.submitted">
+                  <error-message/>
+                </div>
+              </div>
+
+              <!-- email -->
+              <div class="form-group">
+                <label class="control-label" for="email">email</label>
+                <div class="controls">
+                  <input type="text" ng-model="vmContact.formData.email" id="email" name="email" class="form-control" placeholder="email" required>
+                </div>
+                <div class="error-messages message" ng-messages="FormName.email.$error" ng-messages-multiple ng-if="vmContact.submitted">
+                  <error-message/>
+                </div>
+              </div>
+
+              <!-- phone -->
+              <div class="form-group">
+                <label class="control-label" for="phone">phone</label>
+                <div class="controls">
+                  <input type="text" ng-model="vmContact.formData.phone" id="phone" name="phone" class="form-control" placeholder="phone">
+                </div>
+                <div class="error-messages message" ng-messages="FormName.phone.$error" ng-messages-multiple ng-if="vmContact.submitted">
+                  <error-message/>
+                </div>
+              </div>
+
+              <!-- address -->
+              <div class="form-group">
+                <label class="control-label" for="address">address</label>
+                <div class="controls">
+                  <input type="text" ng-model="vmContact.formData.address" id="address" name="address" class="form-control" placeholder="address">
+                </div>
+                <div class="error-messages message" ng-messages="FormName.address.$error" ng-messages-multiple ng-if="vmContact.submitted">
+                  <error-message/>
+                </div>
+              </div>
+
+              <!-- message -->
+              <div class="form-group">
+                <label class="control-label" for="message">message</label>
+                <div class="controls">
+                  <textarea type="text" ng-model="vmContact.formData.message" id="message" name="message" class="form-control" placeholder="message" required></textarea>
+                </div>
+                <div class="error-messages message" ng-messages="FormName.message.$error" ng-messages-multiple ng-if="vmContact.submitted">
+                  <error-message/>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="box box-default">
+            <div class="box-body">
+              <div class="form-group">
+                <label class="control-label" for="status">Status</label>
+                <div class="controls">
+                  <select class="form-control" ng-model="vmContact.formData.status" id="status" ng-options="item.value as item.name for item in vmContact.statuses" required>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+</section>

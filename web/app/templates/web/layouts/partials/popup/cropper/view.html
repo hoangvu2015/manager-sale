@@ -1,0 +1,40 @@
+
+<script type="text/ng-template" id="pop-avatar.html">
+	<div id="pop-avatar" class="popupStyle">
+		<div class="pop-head">
+			<h3>Cắt hình</h3>
+		</div>
+		<div cropper
+			crop-image="{{popupScope.image}}"
+			crop-ratio="{{popupScope.ratio}}"
+			crop-width="{{popupScope.width}}"
+			crop-height="{{popupScope.height}}"
+			crop-event="{{popupScope.event}}"
+			crop-mime="{{popupScope.mimeType}}">
+			<input id="cropper-input-file" class="none" accept=".jpg,.png,.jpeg|images/*" type="file" onchange="angular.element(this).scope().setImage(this)" ng-model="fileSelected" />
+			<div class="pop-top-controls">
+				<button class="btn btn-primary btn-browse" ng-show="showButtonCrop" ng-click="fileTrigger()" ng-bind="popupScope.props.btnBrowse" ng-if="popupScope.props.btnBrowse"></button>
+				<button class="btn btn-primary btn-save" ng-disabled="!showButtonCrop" ng-click="getImage();ok()" ng-bind="popupScope.props.btnOk" ng-if="popupScope.props.btnOk"></button>
+				<button class="btn btn-secondary btn-cancel" ng-click="cancel()" ng-bind="popupScope.props.btnCancel" ng-if="popupScope.props.btnCancel"></button>
+				<div class="clearfix"></div>
+			</div>
+			<div class="pop-content">
+				<div class="croper-zoom" ng-show="showButtonCrop" ng-if="popupScope.props.showControl">
+					<span ng-click="zoom(-0.1)" class="cmd btn-zoom-out" ng-if="popupScope.props.btnZoomVisible"><img src="images/cropper-zoomout.png"></span>
+					<span ng-click="zoom(0.1)" class="cmd btn-zoom-in" ng-if="popupScope.props.btnZoomVisible"><img src="images/cropper-zoomin.png"></span>
+					<span ng-click="rotate()" class="cmd btn-rotate" ng-if="popupScope.props.btnRotateVisible"><img src="images/cropper-rotate.png"></span>
+					<span ng-click="scale()" class="cmd btn-scale" ng-if="popupScope.props.btnFlipVisible"><img src="images/cropper-flip.png"></span>
+				</div>
+				<div class="cropper-browser" ng-hide="showButtonCrop" ng-click="fileTrigger()">
+					<a ng-if="!loading"><span class="icon">+</span>Chọn ảnh</a>
+				</div>
+				<div class="loading-btn" ng-if="loading">
+					<div class="circle"></div>
+				</div>
+				<div class="cropper-wrap" ng-show="showButtonCrop">
+					<img id="cropper-img" class="img-fluid">
+				</div>
+			</div>
+		</div>
+	</div>
+</script>

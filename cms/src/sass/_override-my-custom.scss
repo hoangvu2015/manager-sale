@@ -1,0 +1,57 @@
+
+/* Start froala hoangvu53th@gmail.com*/
+.fr-box.fr-basic.fr-top {
+  margin-top: 20px;
+}
+/* End froala hoangvu53th@gmail.com*/
+
+/* Start image preview hoangvu53th@gmail.com*/
+.img-preview{
+  border: 1px solid chartreuse; 
+  margin: 5px 10px;
+}
+.preview-block{
+  display: block;
+}
+.preview-content{
+  position: relative;
+  display: inline-block; 
+}
+.remove-imgcustom{
+  position: absolute;
+  right: -6px;
+  top: 5px;
+  cursor: pointer;
+}
+/* End image preview hoangvu53th@gmail.com*/
+
+/* Start Select hoangvu53th@gmail.com*/
+.input-group .form-control {
+  z-index: 1;
+}
+.typo__label {
+  font-size: 0.6rem;
+  color: #4ae387;
+  font-weight: 600;
+  text-transform: uppercase;
+  top: -0.6rem;
+  left: 0;
+}
+.multiselect__tags {
+  border-radius: inherit;
+  border: none;
+  border-bottom: 0.0625rem solid #999;
+}
+/* End Select hoangvu53th@gmail.com*/
+
+/* Start Date time flatpickr hoangvu53th@gmail.com*/
+.flatpickr-wrapper{
+  display:block;
+}
+.flatpickr-input {
+  width: 100% !important;
+  color: #000 !important;
+  border-radius: inherit !important;
+  border-bottom: 0.0625rem solid #999 !important;
+}
+/* End Date time flatpickr hoangvu53th@gmail.com*/

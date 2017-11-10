@@ -1,0 +1,153 @@
+<input name="image" type="file" id="upload" class="hidden" onchange="">
+<section ng-init="vmSetting.findOne()">
+  <section class="content-header">
+    <h1>Setting</h1>
+  </section>
+  <ng-loading loading-done="vmSetting.isLoading" />
+  <!-- Main content -->
+  <section class="content">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="box box-info">
+          <div class="box-body">
+            <div ng-if="!vmSetting.queryParams.id" class="form-group">
+              <a class="btn btn-primary" ng-click="vmSetting.create(FormName.$valid, 'save&list')">Save &amp; List</a> &nbsp;&nbsp;
+              <a class="btn btn-primary" ng-click="vmSetting.create(FormName.$valid, 'apply')">Apply</a>&nbsp;&nbsp;
+              <input type="button" value="Cancel" class="btn btn-default" ng-click="vmSetting.gotoList()">&nbsp;&nbsp;
+            </div>
+            <div ng-if="vmSetting.queryParams.id" class="form-group">
+              <a class="btn btn-primary" ng-click="vmSetting.update(FormName.$valid, 'save&list')">Save &amp; List</a> &nbsp;&nbsp;
+              <a class="btn btn-primary" ng-click="vmSetting.update(FormName.$valid, 'apply')">Apply</a>&nbsp;&nbsp;
+              <input type="button" value="Cancel" class="btn btn-default" ng-click="vmSetting.gotoList()">&nbsp;&nbsp;
+            </div>
+          </div>
+        </div>
+      </div>
+      <form novalidate name="FormName">
+        <div class="col-md-8">
+          <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">{{vmSetting.queryParams.id ? 'Edit' : 'New'}} Setting</h3>
+            </div>
+
+            <div class="box-body">
+              <!-- key -->
+              <div class="form-group">
+                <label class="control-label" for="key">Key</label>
+                <div class="controls">
+                  <input type="text" ng-model="vmSetting.formData.key" id="key" name="key" class="form-control" placeholder="key" required>
+                </div>
+                <div class="error-messages message" ng-messages="FormName.key.$error" ng-messages-multiple ng-if="vmSetting.submitted">
+                  <error-message/>
+                </div>
+              </div>
+
+              <!-- Type -->
+              <div class="form-group">
+                <label class="control-label" for="value_type">Type</label>
+                <div class="controls">
+                  <select class="form-control" ng-init="vmSetting.formData.value_type = 'string'" data-ng-model="vmSetting.formData.value_type" id="value_type" name="value_type" ng-options="item.value as item.name for item in vmSetting.value_types" ng-change="vmSetting.changeValueType(vmSetting.formData.value_type)" required>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Value -->
+              <div class="form-group">
+                <label class="control-label" for="value">Value</label>
+                <div class="controls">
+
+                  <!-- String -->
+                  <input ng-show="vmSetting.formData.value_type == 'string'" ng-disabled="vmSetting.formData.value_type != 'string'" type="text" name="value" data-ng-model="vmSetting.formData.value" id="value" class="form-control" placeholder="Value" ng-change="vmSetting.changeValue(vmSetting.formData.value_type, value)" required>
+
+                  <!-- textarea -->
+                  <textarea ng-show="vmSetting.formData.value_type == 'textarea'" ng-disabled="vmSetting.formData.value_type != 'textarea'" rows="10" name="value" data-ng-model="vmSetting.formData.value" id="value" class="form-control" placeholder="Value" ng-change="vmSetting.changeValue(vmSetting.formData.value_type, vmSetting.formData.value)" required></textarea>
+
+                  <!-- number -->
+                  <input ng-show="vmSetting.formData.value_type == 'number'" ng-disabled="vmSetting.formData.value_type != 'number'" type="{{vmSetting.input_value_type}}" name="value" data-ng-model="vmSetting.formData.value" id="value" class="form-control" placeholder="Value" ng-change="vmSetting.changeValue(vmSetting.formData.value_type, vmSetting.formData.value)" required>
+
+                  <!-- boolean -->
+                  <select ng-show="vmSetting.formData.value_type == 'boolean'" ng-disabled="vmSetting.formData.value_type != 'boolean'" class="form-control" data-ng-model="vmSetting.formData.value" id="value" name="value" ng-options="item.value as item.name for item in vmSetting.value_boolean" ng-change="vmSetting.changeValue(vmSetting.formData.value_type, vmSetting.formData.value)"
+                  required></select>
+
+                  <!-- json -->
+                  <div ng-show="vmSetting.formData.value_type == 'json'">
+                    <div ng-disabled="vmSetting.formData.value_type != 'json'" ng-jsoneditor data-ng-model="vmSetting.formData.value" options="vmSetting.json_editor_opt" style="width: 100%; height: 300px;"></div>
+                    <div style="text-align: right;">
+                      <button type="button" class="btn btn-sm btn-info" ng-click="vmSetting.changeOptions()"><i class="fa fa-check-circle"></i> Toggle tree/code mode</button>
+                    </div>
+                    <pre>{{vmSetting.prettyJson(vmSetting.formData.value_type, vmSetting.formData.value)}}</pre>
+                  </div>
+
+                  <!-- image Create-->
+                  <div ng-if="vmSetting.formData.value_type == 'image' && !vmSetting.queryParams.id">
+                    <button ng-if="!f " ngf-select="vmSetting.uploadFileSetting($file, $invalidFiles)" accept="image/*" ngf-max-size="10MB">
+                      <span>Upload image</span>
+                    </button>
+                    <div style="max-width: 300px; text-align: center">
+                      <img ngf-src="!vmSetting.f.$error && vmSetting.f" alt="" ngf-select="vmSetting.uploadFileSetting($file, $invalidFiles)" accept="image/*" ngf-max-size="10MB" style="width: 100%">
+                      <div style="margin: 3px 0" ng-if="(!vmSetting.f.$error && vmSetting.f)">
+                        <a href="javascript:void(0);" class="btn btn-sm btn-info" ngf-select="vmSetting.uploadFileSetting($file, $invalidFiles)" accept="image/*" ngf-max-size="10MB"><i class="fa fa-edit"></i> Change image</a>
+                        <a href="javascript:void(0);" class="btn btn-sm btn-info" ng-click="vmSetting.cancelUpload()"><i class="fa fa-trash"></i> Remove</a>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- image Edit-->
+                  <div ng-if="vmSetting.formData.value_type == 'image' && vmSetting.queryParams.id">
+                    <button ng-if="!vmSetting.f && !vmSetting.formData.value" ngf-select="vmSetting.uploadFileSetting($file, $invalidFiles)" accept="image/*" ngf-max-size="10MB">
+                      <span>Upload image</span>
+                    </button>
+                    <div style="max-width: 300px; text-align: center">
+                      <img ngf-select="vmSetting.uploadFileSetting($file, $invalidFiles)" accept="image/*" ngf-max-size="10MB" ng-if="!vmSetting.f && vmSetting.formData.value" ng-src="{{vmSetting.formData.value}}" alt="Setting value image" style="width: 100%" />
+                      <img ngf-src="!vmSetting.f.$error && vmSetting.f" alt="" ngf-select="vmSetting.uploadFileSetting($file, $invalidFiles)" accept="image/*" ngf-max-size="10MB" style="width: 100%">
+                      <div style="margin: 3px 0" ng-if="(!vmSetting.f.$error && vmSetting.f) || vmSetting.formData.value">
+                        <a href="javascript:void(0);" class="btn btn-sm btn-info" ngf-select="vmSetting.uploadFileSetting($file, $invalidFiles)" accept="image/*" ngf-max-size="10MB"><i class="fa fa-edit"></i> Change image</a>
+                        <a href="javascript:void(0);" class="btn btn-sm btn-info" ng-click="vmSetting.cancelUpload()"><i class="fa fa-trash"></i> Remove</a>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- date -->
+                  <div ng-if="vmSetting.formData.value_type == 'date'" ng-disabled="vmSetting.formData.value_type != 'date'" class="input-group" ng-click="vmSetting.openCalendar()">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input type="text" name="start_date" ng-change="vmSetting.changeValue(vmSetting.setting.value_type, vmSetting.setting.value)" required data-ng-model="vmSetting.formData.value" id="start_date" class="form-control" placeholder="DateTime" disabled datetime-picker="dd MMM yyyy HH:mm:00" is-open="vmSetting.isOpen.start_date"
+                    />  
+                  </div>
+
+                </div>
+                <div class="error-messages message" ng-messages="vmSetting.imageValidate" ng-messages-multiple ng-if="vmSetting.imageValidate">
+                  <div ng-bind="vmSetting.imageValidate"></div>
+                </div>
+                <div class="error-messages message" ng-messages="FormName.value.$error" ng-messages-multiple ng-if="vmSetting.submitted && vmSetting.formData.value_type != 'image'">
+                  <error-message/>
+                </div>
+              </div>
+
+              <!-- Description -->
+              <div class="form-group">
+                <label class="control-label" for="description">Description</label>
+                <div class="controls">
+                  <textarea class="form-control" name="description" ng-model="vmSetting.formData.description" rows="5"></textarea>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="box box-default">
+            <div class="box-body">
+              <div class="form-group">
+                <label class="control-label" for="status">Status</label>
+                <div class="controls">
+                  <select class="form-control" ng-init="vmSetting.formData.status = 1" ng-model="vmSetting.formData.status" id="status" ng-options="item.value as item.name for item in vmSetting.statuses" required>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+</section>

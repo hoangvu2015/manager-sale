@@ -1,0 +1,25 @@
+<li class="treeview">
+	<a href="#">
+		<i class="fa fa-table"></i>
+		<span>Banners</span>
+		<span class="pull-right-container">
+			<i class="fa fa-angle-left pull-right"></i>
+		</span>
+	</a>
+	<ul class="treeview-menu">
+		<!-- =========================Banners========================= -->
+		<li ng-if="pageMethods.authSvc.isAdmin" ng-class="{'active':pageData.menuType === 'list-banner'}" class="treeview">
+			<a data-ui-sref="listBanner()">
+				<i class="fa fa-circle-o text-aqua"></i> <span> List banners</span>
+			</a>
+		</li>
+
+		<!-- =========================Banners========================= -->
+		<li ng-if="pageMethods.authSvc.isAdmin" ng-class="{'active':pageData.menuType === 'create-banner'}" class="treeview">
+			<a ui-sref="createBanner()">
+				<i class="fa fa-circle-o text-aqua"></i> <span> Create banners</span>
+			</a>
+		</li>
+		<!-- =========================END Banners========================= -->
+	</ul>
+</li>

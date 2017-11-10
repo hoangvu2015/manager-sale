@@ -1,0 +1,17 @@
+<div id="partials-footer">
+    <div class="container">
+        <ul class="list-inline">
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">About Us</a></li>
+            <li><a href="/term">Terms and Conditions</a></li>
+            <li><a href="/help">Help</a></li>
+            <li><a href="/support">Support</a></li>
+            <li><a href="/faq">FAQs</a></li>
+        </ul>
+    </div>
+</div>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<% asyncEach asset in assets.js %>
+  <script type="text/javascript" src="<$ asset $>" ></script>
+<% endeach %>
+<$ cmsSettings.siteGA  | safe $>

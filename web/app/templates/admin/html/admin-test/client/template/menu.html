@@ -1,0 +1,25 @@
+<li class="treeview">
+  <a href="#">
+    <i class="fa fa-table"></i>
+    <span>Tests</span>
+    <span class="pull-right-container">
+      <i class="fa fa-angle-left pull-right"></i>
+    </span>
+  </a>
+  <ul class="treeview-menu">
+    <!-- =========================Tests========================= -->
+    <li ng-if="pageMethods.authSvc.isAdmin" ng-class="{'active':pageData.menuType === 'list-test'}" class="treeview">
+      <a data-ui-sref="listTest()">
+        <i class="fa fa-circle-o text-aqua"></i> <span> List tests</span>
+      </a>
+    </li>
+
+    <!-- =========================Tests========================= -->
+    <li ng-if="pageMethods.authSvc.isAdmin" ng-class="{'active':pageData.menuType === 'create-test'}" class="treeview">
+      <a ui-sref="createTest()">
+        <i class="fa fa-circle-o text-aqua"></i> <span> Create test</span>
+      </a>
+    </li>
+    <!-- =========================END Tests========================= -->
+  </ul>
+</li>

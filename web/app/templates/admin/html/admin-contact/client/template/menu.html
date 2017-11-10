@@ -1,0 +1,25 @@
+<li class="treeview">
+  <a href="#">
+    <i class="fa fa-table"></i>
+    <span>Contacts</span>
+    <span class="pull-right-container">
+      <i class="fa fa-angle-left pull-right"></i>
+    </span>
+  </a>
+  <ul class="treeview-menu">
+    <!-- =========================Contacts========================= -->
+    <li ng-if="pageMethods.authSvc.isAdmin" ng-class="{'active':pageData.menuType === 'list-contact'}" class="treeview">
+      <a data-ui-sref="listContact()">
+        <i class="fa fa-circle-o text-aqua"></i> <span> List contacts</span>
+      </a>
+    </li>
+
+    <!-- =========================Contacts========================= -->
+    <li ng-if="pageMethods.authSvc.isAdmin" ng-class="{'active':pageData.menuType === 'create-contact'}" class="treeview">
+      <a ui-sref="createContact()">
+        <i class="fa fa-circle-o text-aqua"></i> <span> Create contacts</span>
+      </a>
+    </li>
+    <!-- =========================END Contacts========================= -->
+  </ul>
+</li>
