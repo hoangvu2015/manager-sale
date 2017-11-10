@@ -220,64 +220,64 @@ module.exports = class extends Generator {
 
     /*=================START VUE CMS MODULE================*/
 
-    /*Đăng ký route*/
-    this.fs.copyTpl(
-      this.templatePath('cms-vue/router.js'),
-      this.destinationPath('../cms/src/store/modules/menu/'+module.moduleName+'.js'),{
-        moduleName: module.moduleName,
-        modelName: module.modelName
-      });
+    // /*Đăng ký route*/
+    // this.fs.copyTpl(
+    //   this.templatePath('cms-vue/router.js'),
+    //   this.destinationPath('../cms/src/store/modules/menu/'+module.moduleName+'.js'),{
+    //     moduleName: module.moduleName,
+    //     modelName: module.modelName
+    //   });
 
-    /*Đăng ký Component*/
-    this.fs.copyTpl(
-      this.templatePath('cms-vue/component/_/data/fields.js'),
-      this.destinationPath('../cms/src/components/'+module.moduleName+'s/data/fields.js'),{
-        moduleName: module.moduleName,
-        modelName: module.modelName,
-        formInfo: formInfo
-      });
+    // /*Đăng ký Component*/
+    // this.fs.copyTpl(
+    //   this.templatePath('cms-vue/component/_/data/fields.js'),
+    //   this.destinationPath('../cms/src/components/'+module.moduleName+'s/data/fields.js'),{
+    //     moduleName: module.moduleName,
+    //     modelName: module.modelName,
+    //     formInfo: formInfo
+    //   });
 
-    this.fs.copyTpl(
-      this.templatePath('cms-vue/component/_/List.vue'),
-      this.destinationPath('../cms/src/components/'+module.moduleName+'s/List.vue'),{
-        moduleName: module.moduleName,
-        modelName: module.modelName,
-        moduleNameUpper: module.moduleNameUpper
-      });
+    // this.fs.copyTpl(
+    //   this.templatePath('cms-vue/component/_/List.vue'),
+    //   this.destinationPath('../cms/src/components/'+module.moduleName+'s/List.vue'),{
+    //     moduleName: module.moduleName,
+    //     modelName: module.modelName,
+    //     moduleNameUpper: module.moduleNameUpper
+    //   });
 
-    this.fs.copyTpl(
-      this.templatePath('cms-vue/component/_/Detail.vue'),
-      this.destinationPath('../cms/src/components/'+module.moduleName+'s/Detail.vue'),{
-        moduleName: module.moduleName,
-        modelName: module.modelName,
-        moduleNameUpper: module.moduleNameUpper,
-        formInfo: formInfo
-      });
+    // this.fs.copyTpl(
+    //   this.templatePath('cms-vue/component/_/Detail.vue'),
+    //   this.destinationPath('../cms/src/components/'+module.moduleName+'s/Detail.vue'),{
+    //     moduleName: module.moduleName,
+    //     modelName: module.modelName,
+    //     moduleNameUpper: module.moduleNameUpper,
+    //     formInfo: formInfo
+    //   });
 
-    /*Change content file service + inject module*/
-    fs.appendFile(
-      '../cms/src/services/url.js',
-      '\nexport const API_'+module.moduleNameUpper+' = window.adminUrl + \'/'+module.moduleName+'\';', 
-      function (err) {
-        if (err) return console.log(err);
-        console.log('Saved!');
-      });
+    // /*Change content file service + inject module*/
+    // fs.appendFile(
+    //   '../cms/src/services/url.js',
+    //   '\nexport const API_'+module.moduleNameUpper+' = window.adminUrl + \'/'+module.moduleName+'\';', 
+    //   function (err) {
+    //     if (err) return console.log(err);
+    //     console.log('Saved!');
+    //   });
 
-    var file = fs.createReadStream('../cms/src/store/modules/menu/index.js', 'utf8');
-    var newContent = '';
-    file.on('data', function (chunk) {
-      newContent += chunk.toString().replace(/\/\*generator import module\*\//g, 'import '+module.moduleName+' from \'./'+module.moduleName+'\'\n\/\*generator import module\*\/')
-      .replace(/\/\*generator inject module\*\//g, '\/\*generator inject module\*\/\n\t\t'+module.moduleName+',');
-    });
+    // var file = fs.createReadStream('../cms/src/store/modules/menu/index.js', 'utf8');
+    // var newContent = '';
+    // file.on('data', function (chunk) {
+    //   newContent += chunk.toString().replace(/\/\*generator import module\*\//g, 'import '+module.moduleName+' from \'./'+module.moduleName+'\'\n\/\*generator import module\*\/')
+    //   .replace(/\/\*generator inject module\*\//g, '\/\*generator inject module\*\/\n\t\t'+module.moduleName+',');
+    // });
 
-    file.on('end', function () {
-      fs.writeFile('../cms/src/store/modules/menu/index.js', newContent, function(err) {
-        if (err)
-          return console.log(err);
-        else
-          console.log('Updated content file service + inject module!');
-      });
-    });
+    // file.on('end', function () {
+    //   fs.writeFile('../cms/src/store/modules/menu/index.js', newContent, function(err) {
+    //     if (err)
+    //       return console.log(err);
+    //     else
+    //       console.log('Updated content file service + inject module!');
+    //   });
+    // });
 
     /*=================END VUE CMS MODULE================*/
 

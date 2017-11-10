@@ -1,0 +1,161 @@
+<input name="image" type="file" id="upload" class="hidden" onchange="">
+<section ng-init="vmOrder.findOne()">
+  <section class="content-header">
+    <h1>Order</h1>
+  </section>
+  <ng-loading loading-done="vmOrder.isLoading" />
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="box box-info">
+            <div class="box-body">
+              <div ng-if="!vmOrder.queryParams.id" class="form-group">
+                <a class="btn btn-primary" ng-click="vmOrder.create(FormName.$valid, 'save&list')">Save &amp; List</a> &nbsp;&nbsp;
+                <a class="btn btn-primary" ng-click="vmOrder.create(FormName.$valid, 'apply')">Apply</a>&nbsp;&nbsp;
+                <input type="button" value="Cancel" class="btn btn-default" ng-click="vmOrder.gotoList()">&nbsp;&nbsp;
+              </div>
+              <div ng-if="vmOrder.queryParams.id" class="form-group">
+                <a class="btn btn-primary" ng-click="vmOrder.update(FormName.$valid, 'save&list')">Save &amp; List</a> &nbsp;&nbsp;
+                <a class="btn btn-primary" ng-click="vmOrder.update(FormName.$valid, 'apply')">Apply</a>&nbsp;&nbsp;
+                <input type="button" value="Cancel" class="btn btn-default" ng-click="vmOrder.gotoList()">&nbsp;&nbsp;
+              </div>
+            </div>
+          </div>
+        </div>
+        <form novalidate name="FormName">
+          <div class="col-md-8">
+            <div class="box box-primary">
+              <div class="box-header with-border">
+                <h3 class="box-title">{{vmOrder.queryParams.id ? 'Edit' : 'New'}} Order</h3>
+              </div>
+              <div class="box-body">
+                                                                                                                                                                                   
+                <!-- name -->
+                <div class="form-group">
+                  <label class="control-label" for="name">Tên khách hàng</label>
+                  <div class="controls">
+                    <input type="text" ng-model="vmOrder.formData.name" id="name" name="name" class="form-control" placeholder="Tên khách hàng" required>
+                  </div>
+                  <div class="error-messages message" ng-messages="FormName.name.$error" ng-messages-multiple ng-if="vmOrder.submitted">
+                    <error-message/>
+                  </div>
+                </div>
+                                                                                                                                                                                
+                <!-- link_facebook -->
+                <div class="form-group">
+                  <label class="control-label" for="link_facebook">Link Facebook</label>
+                  <div class="controls">
+                    <input type="text" ng-model="vmOrder.formData.link_facebook" id="link_facebook" name="link_facebook" class="form-control" placeholder="Link Facebook">
+                  </div>
+                  <div class="error-messages message" ng-messages="FormName.link_facebook.$error" ng-messages-multiple ng-if="vmOrder.submitted">
+                    <error-message/>
+                  </div>
+                </div>
+                                                                                                                                                                                
+                <!-- phone -->
+                <div class="form-group">
+                  <label class="control-label" for="phone">Số điện thoại</label>
+                  <div class="controls">
+                    <input type="text" ng-model="vmOrder.formData.phone" id="phone" name="phone" class="form-control" placeholder="Số điện thoại" required>
+                  </div>
+                  <div class="error-messages message" ng-messages="FormName.phone.$error" ng-messages-multiple ng-if="vmOrder.submitted">
+                    <error-message/>
+                  </div>
+                </div>
+                                                                                                                                                                                
+                <!-- address -->
+                <div class="form-group">
+                  <label class="control-label" for="address">Địa chỉ</label>
+                  <div class="controls">
+                    <input type="text" ng-model="vmOrder.formData.address" id="address" name="address" class="form-control" placeholder="Địa chỉ" required>
+                  </div>
+                  <div class="error-messages message" ng-messages="FormName.address.$error" ng-messages-multiple ng-if="vmOrder.submitted">
+                    <error-message/>
+                  </div>
+                </div>
+                                                                                                                                                                                                
+                <!-- total -->
+                <div class="form-group">
+                  <label class="control-label" for="total">Tổng tiền</label>
+                  <div class="controls">
+                    <input type="number" ng-model="vmOrder.formData.total" id="total" name="total" class="form-control" placeholder="Tổng tiền" required>
+                  </div>
+                  <div class="error-messages message" ng-messages="FormName.total.$error" ng-messages-multiple ng-if="vmOrder.submitted">
+                    <error-message/>
+                  </div>
+                </div>
+                                                                                                                                                                                
+                <!-- ship_fee -->
+                <div class="form-group">
+                  <label class="control-label" for="ship_fee">Tiền ship</label>
+                  <div class="controls">
+                    <input type="number" ng-model="vmOrder.formData.ship_fee" id="ship_fee" name="ship_fee" class="form-control" placeholder="Tiền ship">
+                  </div>
+                </div>
+                                                                                                                                                                
+                <!-- id_ship -->
+                <div class="form-group">
+                  <label class="control-label" for="id_ship">Mã đơn của bưu điện</label>
+                  <div class="controls">
+                    <input type="text" ng-model="vmOrder.formData.id_ship" id="id_ship" name="id_ship" class="form-control" placeholder="Mã đơn của bưu điện">
+                  </div>
+                </div>
+                                                                                                                                                                                                                
+                <!-- content -->
+                <div class="form-group">
+                  <label class="control-label" for="content">Nội dung mua hàng</label>
+                  <div class="controls">
+                    <textarea class="form-control" ui-tinymce="vmOrder.tinymceOptions" name="content" ng-model="vmOrder.formData.content" rows="5" required></textarea>
+                  </div>
+                   <div class="error-messages message" ng-messages="FormName.content.$error" ng-messages-multiple ng-if="vmOrder.submitted">
+                    <error-message/>
+                  </div>
+                </div>
+                                                                                                                                                                                                                                
+                <!-- date_order -->
+                <div class="form-group">
+                  <label class="control-label" for="date_order">Ngày đặt hàng</label>
+                  <div class="input-group date">
+                    <div class="input-group-addon">
+                      <i class="fa fa-calendar"></i>
+                    </div>
+                    <input type="text" class="form-control pull-right" placeholder="Date" id="date_order" ng-model="vmOrder.formData.date_order" bz-date-time-picker bz-options="vmOrder.dateOptdate_order">
+                  </div>
+                </div>
+                
+                <!-- province -->
+                <div class="form-group">
+                    <label class="control-label" for="ddlProvince">Tỉnh thành</label>
+                    <select class="form-control" name="province" ng-model="vmOrder.formData.province" ng-options="key as value.name for (key , value) in vmOrder.mapVN[0]">
+                        <option value=''>-- Chọn Tỉnh --</option>
+                    </select>
+                </div>
+                                                
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="box box-default">
+              <div class="box-body">
+
+                <!-- Status -->
+                <div class="form-group">
+                  <label class="control-label" for="status">Status</label>
+                  <div class="controls">
+                    <select class="form-control" ng-init="vmOrder.formData.status = 'NEW'" ng-model="vmOrder.formData.status" id="status" required>
+                      <option value="NEW">Mới</option>
+                      <option value="PROCCESS">Đang xử lý</option>
+                      <option value="FINISH">Hoàn thành</option>
+                      <option value="CANCEL">Hủy</option>
+                    </select>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+  </section>

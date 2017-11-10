@@ -9,6 +9,7 @@ import banners from './banners'
 import contacts from './contacts'
 import emailCampaigns from './email-campaigns'
 import test from './test'
+import order from './order'
 /*generator import module*/
 /*(không xóa 2 dòng comment này hoangvu53th@gmail.com)*/
 
@@ -27,6 +28,7 @@ const state = {
 		emailCampaigns,
 		/*(không xóa 2 dòng comment này hoangvu53th@gmail.com)*/
 		/*generator inject module*/
+		order,
 		test
 	]
 };

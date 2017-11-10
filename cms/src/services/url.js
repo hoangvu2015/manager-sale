@@ -13,3 +13,4 @@ export const API_SETTING = window.adminUrl + '/setting';
 export const API_MAILER = window.apiUrl + '/sendmail2';
 export const API_MAILER_CAMPAIGN = window.apiUrl + '/email-campaign/send';
 export const API_TEST = window.adminUrl + '/test';
+export const API_ORDER = window.adminUrl + '/order';

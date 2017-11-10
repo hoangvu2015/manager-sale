@@ -1,0 +1,133 @@
+{
+  "id_order": {
+    "form":{
+      "label": "id tăng tự động",
+      "type": "number",
+      "list": true
+    },
+    "schema": {
+      "type": "Number",
+      "min": 0
+    }
+  },
+  "name": {
+    "form":{
+      "label": "Tên khách hàng",
+      "type": "text",
+      "list": true
+    },
+    "schema": {
+      "type": "String",
+      "default": "",
+      "required": "Please fill name",
+      "trim": true
+    }
+  },
+  "link_facebook": {
+    "form":{
+      "label": "Link Facebook",
+      "type": "text",
+      "list": true
+    },
+    "schema": {
+      "type": "String",
+      "default": "",
+      "trim": true
+    }
+  },
+  "phone": {
+    "form":{
+      "label": "Số điện thoại",
+      "type": "text",
+      "list": true
+    },
+    "schema": {
+      "type": "String",
+      "default": "",
+      "trim": true
+    }
+  },
+  "address": {
+    "form":{
+      "label": "Địa chỉ",
+      "type": "text",
+      "list": true
+    },
+    "schema": {
+      "type": "String",
+      "default": ""
+    }
+  },
+  "total": {
+    "form":{
+      "label": "Tổng tiền",
+      "type": "number",
+      "list": true
+    },
+    "schema": {
+      "type": "Number",
+      "default": 0
+    }
+  },
+  "ship_fee": {
+    "form":{
+      "label": "Tiền ship",
+      "type": "number",
+      "list": true
+    },
+    "schema": {
+      "type": "Number",
+      "default": 0
+    }
+  },
+  "id_ship": {
+    "form":{
+      "label": "Mã đơn của bưu điện",
+      "type": "text",
+      "list": true
+    },
+    "schema": {
+      "type": "String",
+      "default": "",
+      "trim": true
+    }
+  },
+  "content": {
+    "form":{
+      "label": "Nội dung mua hàng",
+      "type": "ckeditor"
+    },
+    "schema": {
+      "type": "String",
+      "default": "",
+      "trim": true
+    }
+  },
+  "date_order": {
+    "form":{
+      "label": "Ngày đặt hàng",
+      "type": "date",
+      "list": true
+    },
+    "schema": {
+      "type": "Date"
+    }
+  },
+  "province": {
+    "form":{
+      "label": "Tỉnh thành",
+      "type": "select",
+      "list": true,
+      "service": {
+        "name": "UserSvc",
+        "module": "province",
+        "key": "_id",
+        "value": "name"
+      }
+    },
+    "schema": [{
+      "type": "Schema.ObjectId",
+      "ref": "Province"
+    }]
+  }
+}

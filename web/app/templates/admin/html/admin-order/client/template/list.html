@@ -1,0 +1,129 @@
+<section ng-init="vmOrder.find()">
+  <section class="content-header">
+    <h1>List Order</h1>
+  </section>
+  <!-- Loading -->
+  <ng-loading loading-done="vmOrder.isLoading" />
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <div class="pull-left">
+                <a class="btn btn-primary" ui-sref="createOrder">New</a> &nbsp;&nbsp;
+                <button class="btn btn-primary" ng-click="vmOrder.openPopupChangeStatusMulti(1)">Publish</button>&nbsp;&nbsp;
+                <button class="btn btn-warning" ng-click="vmOrder.openPopupChangeStatusMulti(0)">UnPublish</button>&nbsp;&nbsp;
+                <button ng-if="vmOrder.search.status !=2" class="btn btn-danger" ng-click="vmOrder.openPopupMoveToTrashMulti()">Move to trash</button>
+                <button ng-if="vmOrder.search.status ==2" class="btn btn-danger" ng-click="vmOrder.openPopupDeleteMulti()">Delete Permanent</button>
+              </div>
+            </div>
+            <hr/>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div class="box-tools">
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="form-inline filter-layout">
+                      <div class="form-group">
+                        <label class="control-label" for="filter">Keyword</label>
+                        <input type="text" name="filter" data-ng-model="vmOrder.search.filter" id="filter" class="form-control" placeholder="Search" />
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label" for="status">Status</label>
+                        <select ng-change="vmOrder.pageChanged(1)" class="form-control" ng-model="vmOrder.search.status" id="status" ng-options="item.value as item.name for item in vmOrder.statuses" required>
+                          <option value="">All status</option>
+                        </select>
+                      </div>
+                      <div class="form-group filter-submit">
+                        <a class="btn btn-primary" ng-click="vmOrder.pageChanged(1)">Filter</a> &nbsp;&nbsp;
+                        <a class="btn btn-primary" ng-click="vmOrder.reset()">Reset</a>
+                      </div>
+                      <hr/>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <h4><b>Summary</b></h4>
+                <p><b>Items Per Page</b>: {{vmOrder.itemsPerPage}}</p>
+                <p><b>Total Page</b>: {{vmOrder.totalPage}}</p>
+                <p><b>Total Items</b>: {{vmOrder.totalItems}}</p>
+              </div>
+              <table id="table-list" class="table table-bordered table-hover">
+                <thead>
+                  <tr>
+                    <th>
+                      <input type="checkbox" ng-model="vmOrder.selectAll" ng-click="vmOrder.sellectAll()" id="selectAll" />
+                    </th>
+                    <th>ID</th>
+                    <th>id tăng tự động</th>
+                    <th>Tên khách hàng</th>
+                    <th>Link Facebook</th>
+                    <th>Số điện thoại</th>
+                    <th>Địa chỉ</th>
+                    <th>Tổng tiền</th>
+                    <th>Tiền ship</th>
+                    <th>Mã đơn của bưu điện</th>
+                    <th>Ngày đặt hàng</th>
+                    <th>Tỉnh thành</th>
+                    <th>Status</th>
+                    <th>Created on</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr data-ng-repeat="order in vmOrder.listItems | filter: query">
+                    <td>
+                      <input type="checkbox" ng-model="vmOrder.rowsSelected[order._id]" />
+                    </td>
+                    <td><a data-ui-sref="editOrder({id: order._id})">{{order._id}}</a></td>
+                    
+                    <td>{{order.id_order}}</td>
+                                                                                                                                                                
+                    <td>{{order.name}}</td>
+                                                                                                                                                                
+                    <td><a href="{{order.link_facebook}}" target="_bank"><span style="font-size: 20px;" class="glyphicon glyphicon-link"></span></a></td>
+                                                                                                                                                                
+                    <td>{{order.phone}}</td>
+                                                                                                                                                                
+                    <td>{{order.address}}</td>
+                                                                                                                                                                
+                    <td>{{order.total}}</td>
+                                                                                                                                                                
+                    <td>{{order.ship_fee}}</td>
+                                                                                                                                                                
+                    <td><a href="http://www.vnpost.vn/vi-vn/dinh-vi/buu-pham?key={{order.id_ship}}" target="_bank">{{order.id_ship}}</a></td>
+                                                                                                                                                                                                                            
+                    <td>{{order.date_order | date:'medium'}}</td>
+                                                                                                                                                                                                                            
+                    <!-- <td>{{order.province}}</td> -->
+                    <td>{{order.province | filterProvince }}</td>
+                                                            
+                    <td>
+                        <span class="label label-info" ng-if="order.status == 'NEW'">Mới </span>
+                        <span class="label label-warning" ng-if="order.status == 'PROCCESS'">Đang xử lý </span>
+                        <span class="label label-success" ng-if="order.status == 'FINISH'">Hoàn Thành</span>
+                        <span class="label label-danger" ng-if="order.status == 'CANCEL'">Hủy </span>
+                      <span class="label label-danger" ng-if="order.status == 2">Trashed </span>
+                    </td>
+                    <td>{{order.createdAt | date:'medium'}}</td>
+                    <td>
+                      <a style="cursor:pointer" ng-if="order.status !== 2" data-ui-sref="editOrder({id: order._id})" title="Edit">
+                        <i class="glyphicon glyphicon-edit"></i></a> &nbsp; &nbsp;
+                        <a style="cursor:pointer" title="Delete" ng-click="vmOrder.confirmDelete(order._id)">
+                          <i class="glyphicon glyphicon-trash"></i>
+                        </a>
+                        &nbsp; &nbsp;
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <bz-pagination ng-show="vmOrder.listItems.length>0" max-page="10" name="order_page" current-page="vmOrder.currentPage" total-page="vmOrder.totalPage" page-changed="vmOrder.pageChanged">
+                </bz-pagination>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>
