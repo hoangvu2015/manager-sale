@@ -1,52 +1,54 @@
-cat <<"EOF" | sudo tee /etc/systemd/system/[ProjectName].service
+cat <<"EOF" | sudo tee /etc/systemd/system/ms.service
     [Unit]
-    Description=[ProjectName] Website
+    Description=ms Website
     Requires=redis.service mongod.service
     After=redis.service mongod.service
 
     [Service]
-    WorkingDirectory=/srv/sites/[ProjectName]/web/
-    ExecStart=/usr/bin/node /srv/sites/[ProjectName]/web/app.js
+    WorkingDirectory=/srv/sites/manager-sale/web/
+    ExecStart=/usr/bin/node /srv/sites/manager-sale/web/app.js
     Restart=always
     RestartSec=3
     StandardOutput=syslog
     StandardError=syslog
-    SyslogIdentifier=[ProjectName]
-    Environment=NODE_ENV=staging CMS_WEB_PORT=CMS_WEB_PORT_NUMBER CMS_ADMIN_PORT=CMS_ADMIN_PORT_NUMBER CMS_API_PORT=CMS_API_PORT_NUMBER
+    SyslogIdentifier=ms
+    Environment=NODE_ENV=production
     [Install]
     WantedBy=multi-user.target
 EOF
-sudo systemctl enable [ProjectName].service
-sudo systemctl restart [ProjectName].service
+sudo systemctl enable ms.service
+sudo systemctl restart ms.service
 
-cat <<"EOF" | sudo tee /etc/nginx/conf.d/[ProjectName].test.bz-dev.com.conf
+
+
+cat <<"EOF" | sudo tee /etc/nginx/conf.d/ms.conf
     # Main site - Front End backend
-    upstream [ProjectName]_site {
+    upstream ms_site {
         ip_hash;
-        server 127.0.0.1:CMS_WEB_PORT_NUMBER;
+        server 127.0.0.1:9006;
         keepalive 8;
     }
-    upstream [ProjectName]_api {
+    upstream ms_api {
         ip_hash;
         keepalive 8;
-        server 127.0.0.1:CMS_API_PORT_NUMBER;
+        server 127.0.0.1:9001;
     }
-    upstream [ProjectName]_cms {
+    upstream ms_cms {
         ip_hash;
         keepalive 8;
-        server 127.0.0.1:CMS_ADMIN_PORT_NUMBER;
+        server 127.0.0.1:9002;
     }
 EOF
 
-cat <<"EOF" | sudo tee /etc/nginx/sites-available/[ProjectName].test.bz-dev.com
+cat <<"EOF" | sudo tee /etc/nginx/sites-available/ms.com
 server {
 listen  80;
-    server_name  [ProjectName].test.bz-dev.com;
-    root /srv/sites/[ProjectName]/web/public;
+    server_name  manager-sale.tk;
+    root /srv/sites/manager-sale/web/public;
     index  index.html;
     server_tokens off;
 
-    error_log /var/log/nginx/error-[ProjectName].log;
+    error_log /var/log/nginx/error-manager-sale.log;
 
     gzip_static on;
     gzip on;
@@ -60,21 +62,21 @@ listen  80;
     location ~ /v1/api {
         proxy_set_header Host $http_host;
         proxy_redirect off;
-        proxy_pass http://[ProjectName]_api;
+        proxy_pass http://ms_api;
     }
 
     location ~ /admin {
         proxy_set_header Host $http_host;
         proxy_redirect off;
-        proxy_pass http://[ProjectName]_cms;
+        proxy_pass http://ms_cms;
     }
     location / {
-        proxy_pass http://[ProjectName]_site;
+        proxy_pass http://ms_site;
         proxy_set_header Host $host;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_redirect off;
     }
 }
 EOF
-sudo ln -s /etc/nginx/sites-{available,enabled}/[ProjectName].test.bz-dev.com
+sudo ln -s /etc/nginx/sites-{available,enabled}/ms.com
 sudo systemctl restart nginx
